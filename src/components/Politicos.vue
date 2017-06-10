@@ -1,9 +1,14 @@
 <template>
 <div class="politicos">
   <input type="text" v-model="nome" class="input">
-  <div class="politico" v-for="politico in filteredPoliticos">
-    <politico :politico="politico">
-    </politico>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="politico" v-for="politico in filteredPoliticos">
+        <politico :politico="politico">
+        </politico>
+      </div>
+    </div>
   </div>
 </div>
 </template>

@@ -6,7 +6,6 @@ import router from './router'
 import vuescroll from 'vue-scroll'
 
 Vue.use(vuescroll)
-
 // from package
 // require('../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss')
 Vue.config.productionTip = false

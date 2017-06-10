@@ -1,5 +1,11 @@
 <template>
-<div class="politico">
+<div class="politico col-lg-4">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      Panel content
+    </div>
+    <div class="panel-footer">Panel footer</div>
+  </div>
   <div class="name">Nome: {{politico.nome}}</div>
   <div class="condicao">Condicao: {{politico.condicao}}</div>
 </div>
@@ -20,6 +26,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

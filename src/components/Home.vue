@@ -77,7 +77,7 @@
     <div class="section section-download">
         <div class="container">
             <div class="row sharing-area text-center">
-                    <h3 class="title">Compartilhe o MeuPolítico.com!</h3>
+                    <h3 class="title">Compartilhe o OsPolíticos.com!</h3>
                     <a href="https://twitter.com/os_politicos" class="btn btn-twitter">
                         <i class="fa fa-twitter"></i>
                         Tweet
@@ -100,7 +100,7 @@
 	            <ul>
 					<li>
 						<a href="https://www.facebook.com/ospoliticoscom/">
-							MeuPolitico.Com
+							OsPolíticos.Com
 						</a>
 					</li>
 					<li>

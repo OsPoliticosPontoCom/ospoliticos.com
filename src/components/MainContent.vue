@@ -1,16 +1,19 @@
 <template>
-<div class="main-content">
+<div class="main-content container">
   <div class="tile is-ancestor">
   <div class="tile is-vertical is-8">
     <div class="tile">
       <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-primary">
-          <p class="title">Vertical...</p>
+          <p class="title">Perfil</p>
           <p class="subtitle">Top tile</p>
+          <div class="content">
+            <perfil></perfil>
+          </div>
         </article>
         <article class="tile is-child notification is-warning">
           <p class="title">Gastos</p>
-          <doughnut :data="{
+          <doughnut :width="260" :height="260" :options="{responsive: false}" :data="{
             labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
             datasets: [
               {
@@ -28,11 +31,8 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child notification is-info">
-          <p class="title">Middle tile</p>
-          <p class="subtitle">With an image</p>
-          <figure class="image is-4by3">
-            <img src="http://bulma.io/images/placeholders/640x480.png">
-          </figure>
+          <p class="title">Deputado 1</p>
+          <compare-card></compare-card>
         </article>
       </div>
     </div>
@@ -49,10 +49,10 @@
   <div class="tile is-parent">
     <article class="tile is-child notification is-success">
       <div class="content">
-        <p class="title">Tall tile</p>
+        <p class="title">Deputado 2</p>
         <p class="subtitle">With even more content</p>
         <div class="content">
-          <!-- Content -->
+          <compare-card></compare-card>
         </div>
       </div>
     </article>
@@ -62,12 +62,16 @@
 </template>
 
 <script>
-import Doughnut from './Doughnut.vue'
+import Doughnut from './Doughnut'
+import CompareCard from './CompareCard'
+import Perfil from './Perfil'
 
 export default {
   name: 'main-content',
   components: {
-    Doughnut
+    Doughnut,
+    CompareCard,
+    Perfil
   }
 }
 </script>

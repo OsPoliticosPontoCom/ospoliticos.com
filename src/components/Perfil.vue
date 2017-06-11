@@ -1,11 +1,9 @@
 <template>
-  <main-content>
-
-  </main-content>
+  <div>
+    <main-content>
+    </main-content>
+  </div>
 </template>
-
-<style>
-</style>
 
 <script>
 import MainContent from './MainContent'
@@ -16,3 +14,6 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>

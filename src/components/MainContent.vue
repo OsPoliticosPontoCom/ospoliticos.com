@@ -8,7 +8,6 @@
           <p class="title">Perfil</p>
           <p class="subtitle">Top tile</p>
           <div class="content">
-            <perfil></perfil>
           </div>
         </article>
         <article class="tile is-child notification is-warning">

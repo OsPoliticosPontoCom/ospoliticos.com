@@ -8,7 +8,9 @@
 export default {
   name: 'compare-card',
   data () {
+    return {
 
+    }
   },
   components: {
   }

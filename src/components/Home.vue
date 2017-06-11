@@ -27,12 +27,12 @@
           <router-link to="/sobre"><i class="material-icons">fingerprint</i> Sobre</router-link>
 				</li>
 				<li>
-					<a href="#" target="_blank">
+					<a href="#">
 						<i class="material-icons">favorite_border</i> Doações
 					</a>
 				</li>
 				<li>
-					<a href="#" target="_blank">
+					<a href="#">
 						<i class="material-icons">account_balance</i> Dicionário Parlamentês
 					</a>
 				</li>

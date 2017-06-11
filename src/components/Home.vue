@@ -24,9 +24,7 @@
 	    <div class="collapse navbar-collapse" :class="{in: open}" id="navigation-index">
 	    	<ul class="nav navbar-nav navbar-right">
 				<li>
-					<a href="#/sobre">
-						<i class="material-icons">fingerprint</i> Sobre
-					</a>
+          <router-link to="/sobre"><i class="material-icons">fingerprint</i> Sobre</router-link>
 				</li>
 				<!-- <li>
 					<a href="#sobre" target="_blank">
@@ -101,22 +99,15 @@
 	        <nav class="pull-left">
 	            <ul>
 					<li>
-						<a href="http://www.creative-tim.com">
+						<a href="https://www.facebook.com/ospoliticoscom/">
 							MeuPolitico.Com
 						</a>
 					</li>
 					<li>
-						<a href="http://presentation.creative-tim.com">
-						   Sobre
-						</a>
+            <router-link to="/sobre">Sobre</router-link>
 					</li>
 					<li>
-						<a href="http://blog.creative-tim.com">
-						   Blog
-						</a>
-					</li>
-					<li>
-						<a href="http://www.creative-tim.com/license">
+						<a href="https://github.com/OsPoliticosPontoCom/ospoliticos.com">
 							Licença
 						</a>
 					</li>

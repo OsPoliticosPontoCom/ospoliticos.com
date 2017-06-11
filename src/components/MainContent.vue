@@ -170,5 +170,7 @@ export default {
 </script>
 
 <style>
-
+.main-content {
+  padding: 20px 0;
+}
 </style>

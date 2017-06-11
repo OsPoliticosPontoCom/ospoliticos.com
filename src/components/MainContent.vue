@@ -14,7 +14,7 @@
         <article class="tile is-child notification is-warning">
           <p class="title">Gastos de Leo de Brito</p>
           <doughnut :width="260" :height="260" :options="{responsive: false}" :data="{
-            labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+            labels: maioresGastosDep1.slice(0,5).map(g => g.nome_fornecedor),
             datasets: [
               {
                 backgroundColor: [
@@ -23,7 +23,7 @@
                   '#00D8FF',
                   '#DD1B16'
                 ],
-                data: [40, 20, 80, 10]
+                data: maioresGastosDep1.slice(0,5).map(g => Number(g.valor_total.split(',')[0]))
               }
             ]
           }"></doughnut>

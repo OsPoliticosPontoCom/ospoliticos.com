@@ -3,7 +3,7 @@
   <nav class="navbar navbar-fixed-top navbar-color-on-scroll">
 	<div class="container">
         <div class="navbar-header">
-	    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-index">
+	    	<button type="button" @click="open = !open" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-index">
 	        	<span class="sr-only">Toggle navigation</span>
 	        	<span class="icon-bar"></span>
 	        	<span class="icon-bar"></span>
@@ -21,7 +21,7 @@
 			<a class="navbar-brand visible-xs" href="#"> MeuPolítico.com </a>
 	    </div>
 
-	    <div class="collapse navbar-collapse" id="navigation-index">
+	    <div class="collapse navbar-collapse" :class="{in: open}" id="navigation-index">
 	    	<ul class="nav navbar-nav navbar-right">
 				<li>
 					<a href="#" target="_blank">
@@ -54,28 +54,31 @@
 	</div>
   </nav>
   <!-- End Navbar -->
-<div class="wrapper is-white">
+  <div class="wrapper is-white">
 
-	<div class="header header-filter">
-		<div class="container is-white">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="brand">
-						<!-- <h1>MeuPolítico.com</h1> -->
+  	<div class="header header-filter">
+  		<div class="container is-white">
+  			<div class="row">
+  				<div class="col-md-8 col-md-offset-2">
+  					<div class="brand">
+  						<!-- <h1>MeuPolítico.com</h1> -->
 
-						<img src="../assets/img/Logo.png" class="img-responsive">
-						<h3>Descubra mais sobre essa galera.</h3>
-					</div>
-				</div>
-			</div>
+  						<img src="../assets/img/Logo.png" class="img-responsive">
+  						<h3>Descubra mais sobre essa galera.</h3>
+  					</div>
+  				</div>
+  			</div>
 
-		</div>
-	</div>
-
+  		</div>
+  	</div>
 
     <div class="section section-download">
         <div class="container">
-
+            <!-- Início da comparação -->
+            <div class="row sharing-area text-center">
+              <h3>Comparação</h3>
+            </div>
+            <!-- Final da comparação -->
             <div class="row sharing-area text-center">
                     <h3>Compartilhe o MeuPolítico.com!</h3>
                     <a href="#" class="btn btn-twitter">
@@ -125,30 +128,7 @@
 	        </div>
 	    </div>
 	</footer>
-</div>
-
-<!-- Sart Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-					<i class="material-icons">clear</i>
-				</button>
-				<h4 class="modal-title">Modal title</h4>
-			</div>
-			<div class="modal-body">
-				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default btn-simple">Nice Button</button>
-				<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!--  End Modal -->
+  </div>
 </div>
 </template>
 
@@ -176,12 +156,12 @@
 </style>
 
 <script>
-import Parallax from 'vue-parallaxy'
-
 export default {
   name: 'home',
-  components: {
-    Parallax
+  data () {
+    return {
+      open: false
+    }
   }
 }
 </script>

@@ -1,12 +1,12 @@
 <template>
 <div class="politicos">
-  <!--
+  
   <input type="text" v-model="nome" class="input">
   <br>
   Estado
   <input type="text" class="input" v-model="estado">
   <br>
-  -->
+
   <h3>Total de {{numProposicoes}} proposições de apenas {{deputadosComProposicao.length}} deputados durante X anos</h3>
   <div class="container">
     <div class="row">

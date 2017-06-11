@@ -6,8 +6,11 @@ import router from './router'
 import vuescroll from 'vue-scroll'
 import 'whatwg-fetch'
 import VueFetch from 'vue-fetch'
+import VueBlu from 'vue-blu'
+import 'vue-blu/dist/css/vue-blu.min.css'
 
 Vue.use(vuescroll)
+Vue.use(VueBlu)
 Vue.use(VueFetch, {
   polyfill: true // should vue-fetch load promise polyfill, set to false to use customer polyfill
 })

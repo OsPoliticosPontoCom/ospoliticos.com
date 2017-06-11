@@ -72,6 +72,10 @@
   		</div>
   	</div>
 
+		<div class="middle-content">
+			<main-content></main-content>
+		</div>
+
     <div class="section section-download">
         <div class="container">
             <!-- Início da comparação -->
@@ -134,7 +138,9 @@
 
 
 <style lang="scss" scoped>
-
+.nav {
+  background-color: transparent;
+}
 .wrapper {
   .container {
     color: #333;
@@ -156,12 +162,16 @@
 </style>
 
 <script>
+import MainContent from './MainContent.vue'
 export default {
   name: 'home',
   data () {
     return {
       open: false
     }
+  },
+  components: {
+    MainContent
   }
 }
 </script>

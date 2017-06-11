@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Politicos from '@/components/Politicos'
 import PoliticoPage from '@/components/PoliticoPage'
 import Perfil from '@/components/Perfil'
+import Sobre from '@/components/Sobre'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/politico/bla',
       name: 'politico-page',
       component: PoliticoPage
+    },
+    {
+      path: '/sobre',
+      name: 'sobre',
+      component: Sobre
     },
     {
       path: '/politico',

@@ -18,7 +18,7 @@
 	                </div>
               </div>
 	      </a>
-			<a class="navbar-brand visible-xs" href="#"> MeuPolítico.com </a>
+			<a class="navbar-brand visible-xs" href="#"> OsPolíticos.com </a>
 	    </div>
 
 	    <div class="collapse navbar-collapse" :class="{in: open}" id="navigation-index">
@@ -80,11 +80,11 @@
         <div class="container">
             <!-- Início da comparação -->
             <div class="row sharing-area text-center">
-              <h3>Comparação</h3>
+              <h1 class="title">Comparação</h1>
             </div>
             <!-- Final da comparação -->
             <div class="row sharing-area text-center">
-                    <h3>Compartilhe o MeuPolítico.com!</h3>
+                    <h3 class="title">Compartilhe o MeuPolítico.com!</h3>
                     <a href="#" class="btn btn-twitter">
                         <i class="fa fa-twitter"></i>
                         Tweet

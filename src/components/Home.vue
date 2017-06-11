@@ -85,15 +85,15 @@
             <!-- Final da comparação -->
             <div class="row sharing-area text-center">
                     <h3 class="title">Compartilhe o MeuPolítico.com!</h3>
-                    <a href="#" class="btn btn-twitter">
+                    <a href="https://twitter.com/os_politicos" class="btn btn-twitter">
                         <i class="fa fa-twitter"></i>
                         Tweet
                     </a>
-                    <a href="#" class="btn btn-facebook">
+                    <a href="https://www.facebook.com/ospoliticoscom/" class="btn btn-facebook">
                         <i class="fa fa-facebook-square"></i>
                         Compartilhar
                     </a>
-					<a href="#" class="btn btn-github">
+					<a href="https://github.com/OsPoliticosPontoCom/ospoliticos.com" class="btn btn-github">
                         <i class="fa fa-github"></i>
                     	Star
                     </a>

@@ -31,6 +31,9 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child notification is-info">
+          <p class="field">
+            <input type="text" class="input" placeholder="Procure por outros deputados">
+          </p>
           <p class="title">Leo de Brito gastou com transporte: R$ {{gastosTransporteDep1}}</p>
           <p class="subtitle">Deputado do estado AC</p>
           <compare-card nome="Leo de Brito" :gastos="gastosDep1"></compare-card>
@@ -40,13 +43,16 @@
     <div class="tile is-parent">
       <article class="tile is-child notification is-danger">
         <p class="title">O Deputado Leo De Brito gastou {{(gastosTransporteDep1/gastosTransporteDep2).toFixed(2)}} vezes mais que o Deputado Hido Rocha</p>
-        <p class="subtitle">Compartilhe e deixe todo mundo saber</p>
+        <p class="subtitle"><a href="https://twitter.com/intent/tweet?text=%22O%20Deputado%20Leo%20De%20Brito%20gastou%202.07%20vezes%20mais%20que%20o%20Deputado%20Hido%20Rocha%22&via=os_politicos" target="_blank"><i class="fa fa-twitter-square"></i> Compartilhar No Twitter</a></p>
       </article>
     </div>
   </div>
   <div class="tile is-parent">
     <article class="tile is-child notification is-success">
       <div class="content">
+        <p class="field">
+          <input type="text" class="input" placeholder="Procure por outros deputados">
+        </p>
         <p class="title">Hildo Rocha gastou com transporte: R$ {{gastosTransporteDep2}}</p>
         <p class="subtitle">Deputad do estado MA</p>
         <div class="content">

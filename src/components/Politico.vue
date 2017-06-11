@@ -2,7 +2,7 @@
 <div class="politico col-md-4">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">{{capitalize(nome)}}</h3>
+      <h3 class="panel-title">{{startCase(toLower(nome))}}</h3>
     </div>
     <div class="panel-body">
       <div>
@@ -10,7 +10,7 @@
           <div class="col-md-4">
             <img :src="urlFoto" :alt="nome">
           </div>
-          <div class="col-md-8">
+          <div class="col-md-8 text-left">
             Partido: {{partido}}  <br>
             Uf: {{uf}}  <br>
             Condição: {{condicao}}
@@ -18,7 +18,7 @@
             <div class="proposicoes" v-if="proposicoes.length > 0">
               Proposicoes ({{proposicoes.length}}):
               <div v-for="proposicao in proposicoes" class="proposicao">
-                <a :href="proposicao.linkInteiroTeor">Nome: {{proposicao.nomeProposicao}}</a><br>
+                <a :href="proposicao.linkInteiroTeor" target="_blank">Nome: {{proposicao.nomeProposicao}}</a><br>
                 Situacao: {{proposicao.situacao}} <br>
                 Tipo: {{proposicao.tipoProposicao}}
                 <hr>
@@ -67,7 +67,7 @@ PROPOSICAO
         "apensadas": "NA"
       }
 */
-import {capitalize} from 'lodash'
+import {capitalize, startCase, toLower} from 'lodash'
 
 export default {
   name: 'politico',
@@ -81,7 +81,9 @@ export default {
     return {...this.politico}
   },
   methods: {
-    capitalize
+    capitalize,
+    startCase,
+    toLower
   }
 }
 </script>

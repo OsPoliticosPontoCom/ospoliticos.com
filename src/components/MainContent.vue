@@ -7,12 +7,23 @@
         <article class="tile is-child notification is-primary">
           <p class="title">Deputado {{startCase(toLower(perfilDep1.ultimoStatus.nomeEleitoral))}}</p>
           <div class="content">
-            <img :src="perfilDep1.ultimoStatus.urlFoto" class="image">
+            <div class="columns">
+              <div class="column is-4">
+                <img :src="perfilDep1.ultimoStatus.urlFoto" class="image">
+              </div>
+              <div class="column is-8">
+                Uma das 154 proposições que ele fez: PL 6978/2017, apresentada em 21/02/2017
+                <hr>
+                <p class="content">
+                  Projeto de lei que cria um programa de incentivo através de compensação financeira aos Estados que fizerem devidamente o repasse dos recursos na Segurança Pública
+                </p>
+              </div>
+            </div>
           </div>
         </article>
         <article class="tile is-child notification is-warning">
           <p class="title">Gastos de Leo de Brito</p>
-          <doughnut :width="260" :height="260" :options="{responsive: false}" :data="{
+          <doughnut :width="360" :height="360" :options="{responsive: false}" :data="{
             labels: maioresGastosDep1.slice(0,5).map(g => g.nome_fornecedor),
             datasets: [
               {
@@ -150,15 +161,39 @@ export default {
     },
     gastosDep1 () {
       return [{
-        label: 'Transporte',
-        percent: (this.gastosTransporteDep1 / this.maiorGastoTransporte) * 100
-      }]
+          label: 'Transporte',
+          percent: 20
+        },
+        {
+          label: 'Faltas',
+          percent: 15
+        },
+        {
+          label: 'Alimentação',
+          percent: 37
+        },
+        {
+          label: 'Gráfica',
+          percent: 30
+        }]
     },
     gastosDep2 () {
       return [{
         label: 'Transporte',
-        percent: (this.gastosTransporteDep2 / this.maiorGastoTransporte) * 100
-      }]
+        percent: 15
+        },
+        {
+          label: 'Faltas',
+          percent: 5
+        },
+        {
+          label: 'Alimentação',
+          percent: 28
+        },
+        {
+          label: 'Gráfica',
+          percent: 50
+        }]
     }
   },
   components: {

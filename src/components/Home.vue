@@ -26,11 +26,16 @@
 				<li>
           <router-link to="/sobre"><i class="material-icons">fingerprint</i> Sobre</router-link>
 				</li>
-				<!-- <li>
-					<a href="#sobre" target="_blank">
-						<i class="material-icons">favorite_border</i> Contribuir
+				<li>
+					<a href="#" target="_blank">
+						<i class="material-icons">favorite_border</i> Doações
 					</a>
-				</li> -->
+				</li>
+				<li>
+					<a href="#" target="_blank">
+						<i class="material-icons">account_balance</i> Dicionário Parlamentês
+					</a>
+				</li>
 				<li>
 					<a rel="tooltip" title="Siga no Twitter" data-placement="bottom" href="https://twitter.com/os_politicos" target="_blank" class="btn btn-white btn-simple btn-just-icon">
 						<i class="fa fa-twitter"></i>
@@ -75,8 +80,16 @@
 		</div>
 
     <div class="section section-download">
-        <div class="container">
+        <div class="">
             <div class="row sharing-area text-center">
+                    <div class="columns">
+                      <div class="column is-8">
+                         <img class="responsive" src="../assets/img/banner-posfit.jpg" alt="">
+                      </div>
+                      <div class="column is-4 anuncie-aqui">
+                        <h3 class="heading">Anuncie você também</h3>
+                      </div>
+                    </div>
                     <h3 class="title">Compartilhe o OsPolíticos.com!</h3>
                     <a href="https://twitter.com/os_politicos" class="btn btn-twitter">
                         <i class="fa fa-twitter"></i>
@@ -134,16 +147,20 @@
       color: white;
     }
     .row {
-      margin-top: 90px;
+      margin-top: 160px;
     }
   }
 }
 .wrapper .header {
-  height: 30vw;
+  height: 43vw;
   background-image: url('../assets/img/01.png');
   &::after {
     background: -webkit-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
   }
+}
+
+.anuncie-aqui {
+  background-color: #bdbcbc;
 }
 </style>
 

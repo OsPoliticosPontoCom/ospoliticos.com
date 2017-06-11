@@ -17,6 +17,7 @@
     "sass-loader": "^6.0.5",
     "uiv": "^0.11.4",
     "vue": "^2.3.3",
+    "vue-fetch": "^0.4.0",
     "vue-infinite-loading": "^2.1.3",
     "vue-material": "^0.7.1",
     "vue-parallaxy": "^1.0.3",

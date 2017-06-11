@@ -1,10 +1,11 @@
 <template>
 <div class="politicos">
   <input type="text" v-model="nome" class="input">
+  Com proposição ?<input type="checkbox" v-model="apenasComProposicao" class="input">
   <br>
   <div class="container">
     <div class="row">
-      <div class="politico" v-for="politico in filteredPoliticos">
+      <div v-for="politico in filteredPoliticos">
         <politico :politico="politico">
         </politico>
       </div>
@@ -24,12 +25,15 @@ export default {
   data () {
     return {
       nome: '',
+      apenasComProposicao: false,
       politicos
     }
   },
   computed: {
     filteredPoliticos () {
-      return this.politicos.filter(p => p.nome.includes(this.nome))
+      return this.politicos
+      .filter(p => this.apenasComProposicao && p.proposicoes.length > 0)
+      .filter(p => p.nome.includes(this.nome))
     }
   },
   components: {

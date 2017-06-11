@@ -6,7 +6,6 @@
       <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-primary">
           <p class="title">Deputado {{startCase(toLower(perfilDep1.ultimoStatus.nomeEleitoral))}}</p>
-          <p class="subtitle">Top tile</p>
           <div class="content">
             <img :src="perfilDep1.ultimoStatus.urlFoto" class="image">
           </div>

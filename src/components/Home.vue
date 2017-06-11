@@ -24,27 +24,27 @@
 	    <div class="collapse navbar-collapse" :class="{in: open}" id="navigation-index">
 	    	<ul class="nav navbar-nav navbar-right">
 				<li>
-					<a href="#" target="_blank">
+					<a href="#/sobre">
 						<i class="material-icons">fingerprint</i> Sobre
 					</a>
 				</li>
-				<li>
-					<a href="#" target="_blank">
+				<!-- <li>
+					<a href="#sobre" target="_blank">
 						<i class="material-icons">favorite_border</i> Contribuir
 					</a>
-				</li>
+				</li> -->
 				<li>
-					<a rel="tooltip" title="Siga no Twitter" data-placement="bottom" href="https://twitter.com/CreativeTim" target="_blank" class="btn btn-white btn-simple btn-just-icon">
+					<a rel="tooltip" title="Siga no Twitter" data-placement="bottom" href="https://twitter.com/os_politicos" target="_blank" class="btn btn-white btn-simple btn-just-icon">
 						<i class="fa fa-twitter"></i>
 					</a>
 				</li>
 				<li>
-					<a rel="tooltip" title="Curta no Facebook" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank" class="btn btn-white btn-simple btn-just-icon">
+					<a rel="tooltip" title="Curta no Facebook" data-placement="bottom" href="https://www.facebook.com/ospoliticoscom/" target="_blank" class="btn btn-white btn-simple btn-just-icon">
 						<i class="fa fa-facebook-square"></i>
 					</a>
 				</li>
 				<li>
-					<a rel="tooltip" title="Siga no Instagram" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank" class="btn btn-white btn-simple btn-just-icon">
+					<a rel="tooltip" title="Siga no Instagram" data-placement="bottom" href="https://www.instagram.com/os.politicos/" target="_blank" class="btn btn-white btn-simple btn-just-icon">
 						<i class="fa fa-instagram"></i>
 					</a>
 				</li>
@@ -78,11 +78,6 @@
 
     <div class="section section-download">
         <div class="container">
-            <!-- Início da comparação -->
-            <div class="row sharing-area text-center">
-              <h1 class="title">Comparação</h1>
-            </div>
-            <!-- Final da comparação -->
             <div class="row sharing-area text-center">
                     <h3 class="title">Compartilhe o MeuPolítico.com!</h3>
                     <a href="https://twitter.com/os_politicos" class="btn btn-twitter">

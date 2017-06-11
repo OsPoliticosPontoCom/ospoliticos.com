@@ -17,10 +17,11 @@
             datasets: [
               {
                 backgroundColor: [
-                  '#41B883',
-                  '#E46651',
-                  '#00D8FF',
-                  '#DD1B16'
+                  'rgb(255, 99, 132)',
+                  'rgb(54, 162, 235)',
+                  'rgb(255, 205, 86)',
+                  'rgb(0, 150, 136)',
+                  'rgb(121, 85, 72)'
                 ],
                 data: maioresGastosDep1.slice(0,5).map(g => Number(g.valor_total.split(',')[0]))
               }

@@ -20,7 +20,8 @@
               <div v-for="proposicao in proposicoes" class="proposicao">
                 <a :href="proposicao.linkInteiroTeor" target="_blank">Nome: {{proposicao.nomeProposicao}}</a><br>
                 Situacao: {{proposicao.situacao}} <br>
-                Tipo: {{proposicao.tipoProposicao}}
+                Tipo: {{proposicao.tipoProposicao}} <br>
+                Apresentada em: {{proposicao.dataApresentacao}}
                 <hr>
               </div>
             </div>

@@ -1,16 +1,16 @@
 <template>
 <div class="politicos">
+  <!--
   <input type="text" v-model="nome" class="input">
-  Com proposição ?
-  <input type="checkbox" v-model="apenasComProposicao" class="input">
   <br>
   Estado
   <input type="text" class="input" v-model="estado">
   <br>
+  -->
   <h3>Total de {{numProposicoes}} proposições de apenas {{deputadosComProposicao.length}} deputados durante X anos</h3>
   <div class="container">
     <div class="row">
-      <div v-for="politico in filteredPoliticos">
+      <div v-for="politico in filteredDeputadosComProposicao">
         <politico :politico="politico">
         </politico>
       </div>
@@ -53,11 +53,12 @@ export default {
     }
   },
   computed: {
+    // N FUNCIONA
     filteredPoliticos () {
       return this.politicos
       .filter(p => {
         if (this.apenasComProposicao) {
-          return p.proposicoes.length > 0
+          return p.proposicoes && p.proposicoes.length > 0
         }
         return true
       })
@@ -71,7 +72,16 @@ export default {
     },
     deputadosComProposicao () {
       return this.politicos.filter(p => {
-        return p.proposicoes.length > 0
+        return p.proposicoes && p.proposicoes.length > 0
+      })
+    },
+    filteredDeputadosComProposicao () {
+      return this.deputadosComProposicao
+      .filter(p => {
+        if (this.estado.length > 0) {
+          return p.uf.toLowerCase().includes(this.estado.toLowerCase())
+        }
+        return true
       })
     }
   },

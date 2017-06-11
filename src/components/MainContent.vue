@@ -9,8 +9,21 @@
           <p class="subtitle">Top tile</p>
         </article>
         <article class="tile is-child notification is-warning">
-          <p class="title">...tiles</p>
-          <p class="subtitle">Bottom tile</p>
+          <p class="title">Gastos</p>
+          <doughnut :data="{
+            labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+            datasets: [
+              {
+                backgroundColor: [
+                  '#41B883',
+                  '#E46651',
+                  '#00D8FF',
+                  '#DD1B16'
+                ],
+                data: [40, 20, 80, 10]
+              }
+            ]
+          }"></doughnut>
         </article>
       </div>
       <div class="tile is-parent">
@@ -49,8 +62,13 @@
 </template>
 
 <script>
+import Doughnut from './Doughnut.vue'
+
 export default {
-  name: 'main-content'
+  name: 'main-content',
+  components: {
+    Doughnut
+  }
 }
 </script>
 

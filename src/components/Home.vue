@@ -24,7 +24,9 @@
 	    <div class="collapse navbar-collapse" :class="{in: open}" id="navigation-index">
 	    	<ul class="nav navbar-nav navbar-right">
 				<li>
-          <router-link to="/sobre"><i class="material-icons">fingerprint</i> Sobre</router-link>
+					<a href="#/sobre">
+						<i class="material-icons">fingerprint</i> Sobre
+					</a>
 				</li>
 				<!-- <li>
 					<a href="#sobre" target="_blank">
@@ -99,22 +101,24 @@
 	        <nav class="pull-left">
 	            <ul>
 					<li>
-						<a href="https://www.facebook.com/ospoliticoscom/">
-							MeuPolitico.Com
+						<a href="https://github.com/OsPoliticosPontoCom/ospoliticos.com">
+							OsPoliticos.Com
 						</a>
 					</li>
 					<li>
-            <router-link to="/sobre">Sobre</router-link>
+						<a href="#/sobre">
+						   Sobre
+						</a>
 					</li>
 					<li>
-						<a href="https://github.com/OsPoliticosPontoCom/ospoliticos.com">
+						<a href="https://github.com/OsPoliticosPontoCom/ospoliticos.com/blob/master/LICENSE">
 							Licença
 						</a>
 					</li>
 	            </ul>
 	        </nav>
 	        <div class="copyright pull-right">
-	            &copy; 2017, made with <i class="material-icons">favorite</i> by Creative Tim for a better web.
+	            &copy; 2017, desenvolvido por Os Politicos.com.
 	        </div>
 	    </div>
 	</footer>

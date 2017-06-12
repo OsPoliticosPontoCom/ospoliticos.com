@@ -1,4 +1,4 @@
-# meupolitico
+# OsPolíticos.com
 
 > Nossa intenção é concentrar e divulgar a informação útil acerca da atividade dos políticos para popularizar um estado de consciência política efetiva
 

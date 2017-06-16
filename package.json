@@ -2,10 +2,12 @@
   "name": "ospoliticos.com",
   "version": "1.0.0",
   "description": "Nossa intenção é concentrar e divulgar a informação útil acerca da atividade dos políticos para popularizar um estado de consciência política efetiva",
-  "contributors": [{
-    "name": "Cassio Cabral",
-    "email": "cassioscabral@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Cassio Cabral",
+      "email": "cassioscabral@gmail.com"
+    }
+  ],
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -23,7 +25,8 @@
     "vue-chartjs": "^2.6.5",
     "vue-fetch": "^0.4.0",
     "vue-infinite-loading": "^2.1.3",
-    "vue-router": "^2.3.1"
+    "vue-router": "^2.3.1",
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

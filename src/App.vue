@@ -5,9 +5,6 @@
 </template>
 
 <script>
-import './assets/css/bootstrap.min.css'
-import './assets/css/material-kit.css'
-import './assets/css/demo.css'
 
 export default {
   name: 'app',

@@ -1,11 +1,41 @@
 <template>
 <div class="home">
-  <h1>Home</h1>
+  <section class="hero is-success is-large">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Large title
+        </h1>
+        <h2 class="subtitle">
+          Large subtitle
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      Conteudo
+    </div>
+  </section>
 </div>
 </template>
 
 
 <style lang="scss" scoped>
+
+.home {
+  .hero {
+    .hero-body {
+      background-image: url('~assets/img/01.png');
+      background-size: cover;
+      &::after {
+        background: -webkit-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.30) 100%);
+        background: linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.30) 100%);
+      }
+    }
+  }
+}
+
 .nav {
   background-color: transparent;
 }

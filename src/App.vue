@@ -1,14 +1,23 @@
 <template>
   <div id="app">
+    <navbar></navbar>
     <router-view></router-view>
+    <footer></footer>
   </div>
 </template>
 
 <script>
+import NavBar from './components/shared/NavBar'
+import Footer from './components/shared/Footer'
 
 export default {
   name: 'app',
   mounted () {
+
+  },
+  components: {
+    navbar: NavBar,
+    Footer
   }
 }
 </script>
@@ -20,6 +29,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

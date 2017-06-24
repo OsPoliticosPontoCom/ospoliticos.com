@@ -3,11 +3,11 @@
   <section class="hero is-success is-large">
     <div class="hero-body">
       <div class="container">
-        <h1 class="title">
-          Large title
+        <h1 class="title is-1">
+          OsPolíticos.com
         </h1>
         <h2 class="subtitle">
-          Large subtitle
+          Saiba mais sobre essa galera
         </h2>
       </div>
     </div>

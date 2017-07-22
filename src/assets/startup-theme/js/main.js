@@ -31,13 +31,13 @@ $(document).ready(function() {
 
     if( $(window).scrollTop()>600 ){
 
-      $('.header-top .header-fixed-wrapper').addClass('navbar-fixed-top animated fadeInDown');
+      $('.header-top .header-fixed-wrapper.is-home').addClass('navbar-fixed-top animated fadeInDown');
 
 
 
     } else {
 
-      $('.header-top .header-fixed-wrapper').removeClass('navbar-fixed-top animated fadeInDown');
+      $('.header-top .header-fixed-wrapper.is-home').removeClass('navbar-fixed-top animated fadeInDown');
 
     }
 

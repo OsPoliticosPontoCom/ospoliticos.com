@@ -1,20 +1,24 @@
 <template>
-<div class="politicos">
-  
+<div class="politicos navbar-margin">
+
   <input type="text" v-model="nome" class="input">
   <br>
   Estado
-  <input type="text" class="input" v-model="estado">
+  <select v-model="estado">
+    <option disabled value="">Estado</option>
+    <option :value="estado.sigla" v-for="estado in estados" :key="estado.id">{{estado.nome}}</option>
+  </select>
   <br>
 
-  <h3>Total de {{numProposicoes}} proposições de apenas {{deputadosComProposicao.length}} deputados durante X anos</h3>
   <div class="container">
     <div class="row">
-      <div v-for="politico in filteredDeputadosComProposicao">
+      <div v-for="politico in politicos" :key="politico.id">
         <politico :politico="politico">
         </politico>
       </div>
+      <!--
       <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading"></infinite-loading>
+      -->
     </div>
   </div>
 </div>
@@ -24,20 +28,39 @@
 </style>
 
 <script>
-import politicos from '../data/politicos.json'
 import Politico from './Politico.vue'
 // PODE SER UTIL https://github.com/coderdiaz/vue-datasource
 import InfiniteLoading from 'vue-infinite-loading'
 
+async function getDeputadosFromUF (uf, fetch) {
+  const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=99&ordem=ASC&ordenarPor=nome`)
+  const result = await deputados.json()
+  return result.dados
+}
+
 export default {
   name: 'politicos',
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      // deputados
+      // const deputados = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=PB&itens=50&ordem=ASC&ordenarPor=nome`)
+      // const result = await deputados.json()
+      vm.politicos = await getDeputadosFromUF('PB', vm.$fetch)
+
+      // estados
+      const estados = await vm.$fetch.get('https://dadosabertos.camara.leg.br/api/v2/referencias/uf')
+      console.log('estados', estados)
+      const resultEstados = await estados.json()
+      vm.estados = resultEstados.dados
+    })
+  },
   data () {
     return {
       nome: '',
       apenasComProposicao: false,
-      politicos,
-      numProposicoes: politicos.reduce((pre, cur) => cur.proposicoes.length + pre, 0),
-      estado: ''
+      politicos: [],
+      estado: 'PB',
+      estados: ['PB', 'PE', 'SP', 'RJ'] // UFs, PB, PE, SP...
     }
   },
   methods: {
@@ -53,36 +76,10 @@ export default {
     }
   },
   computed: {
-    // N FUNCIONA
-    filteredPoliticos () {
-      return this.politicos
-      .filter(p => {
-        if (this.apenasComProposicao) {
-          return p.proposicoes && p.proposicoes.length > 0
-        }
-        return true
-      })
-      .filter(p => p.nome.toLowerCase().includes(this.nome.toLowerCase()))
-      .filter(p => {
-        if (this.estado.length > 0) {
-          return p.uf.toLowerCase().includes(this.estado.toLowerCase())
-        }
-        return true
-      })
-    },
-    deputadosComProposicao () {
-      return this.politicos.filter(p => {
-        return p.proposicoes && p.proposicoes.length > 0
-      })
-    },
-    filteredDeputadosComProposicao () {
-      return this.deputadosComProposicao
-      .filter(p => {
-        if (this.estado.length > 0) {
-          return p.uf.toLowerCase().includes(this.estado.toLowerCase())
-        }
-        return true
-      })
+  },
+  watch: {
+    async estado (newEstado) {
+      this.politicos = await getDeputadosFromUF(newEstado, this.$fetch)
     }
   },
   components: {

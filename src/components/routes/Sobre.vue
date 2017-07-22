@@ -3,7 +3,7 @@
   <!-- #a63a3b -->
 <div class="container">
   <br><br><br>
-  <img src="../assets/img/logo-blue.png">
+  <img src="~assets/img/logo-blue.png">
   <h1 class="title">Sobre</h1>
   <div class="columns">
     <div class="column">

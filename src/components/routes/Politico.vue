@@ -7,29 +7,20 @@
     <div class="panel-body">
       <div>
         <div class="row">
-          <div class="col-md-4">
-            <img :src="urlFoto" :alt="nome">
+          <div class="col-md-4" v-if="id">
+
+            <router-link :to="{ name: 'politico', params: { id }}">
+              <img :src="urlFoto" :alt="nome">
+            </router-link>
           </div>
           <div class="col-md-8 text-left">
-            Partido: {{partido}}  <br>
-            Uf: {{uf}}  <br>
-            Condição: {{condicao}}
+            Partido: {{siglaPartido}}  <br>
+            Uf: {{siglaUf}}  <br>
             <hr>
-            <div class="proposicoes" v-if="proposicoes.length > 0">
-              Proposicoes ({{proposicoes.length}}):
-              <div v-for="proposicao in proposicoes" class="proposicao">
-                <a :href="proposicao.linkInteiroTeor" target="_blank">Nome: {{proposicao.nomeProposicao}}</a><br>
-                Situacao: {{proposicao.situacao}} <br>
-                Tipo: {{proposicao.tipoProposicao}} <br>
-                Apresentada em: {{proposicao.dataApresentacao}}
-                <hr>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="panel-footer">{{email}}</div>
   </div>
 </div>
 </template>
@@ -37,12 +28,19 @@
 <script>
 /*
 POLITICO
-
-{ "id": 1, "idParlamentar": "5830382", "ideCadastro": "178980", "codOrcamento": "3283", "matricula": "361", "condicao": "Titular", "nome": "ANTONIO GOULART DOS REIS", "nomeParlamentar": "GOULART", "email": "dep.goulart@camara.gov.br", "gabinete": "533", "anexo": "4", "fone": "3215-5533", "sexo": "masculino", "partido": "PSD", "uf": "SP", "urlFoto": "http://www.camara.gov.br/internet/deputado/bandep/178980.jpg", "proposicoes": [] }
-
+{
+  id:160527
+  idLegislatura:55
+  nome:"AGUINALDO RIBEIRO"
+  siglaPartido:"PP"
+  siglaUf:"PB"
+  uri:"https://dadosabertos.camara.leg.br/api/v2/deputados/160527"
+  uriPartido:"https://dadosabertos.camara.leg.br/api/v2/partidos/36809"
+  urlFoto:"http://www.camara.leg.br/internet/deputado/bandep/160527.jpg"
+}
 -----
 
-PROPOSICAO
+PROPOSICAO - SE TIVER
 
 {
         "id": 142,

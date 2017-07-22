@@ -6,7 +6,8 @@
 
 
 
-        	<div class="header-fixed-wrapper" role="header-fixed">
+        	<div class="header-fixed-wrapper" :class="{
+            'navbar-fixed-top': $route.name != 'home', 'is-home': $route.name === 'home'}" role="header-fixed">
 
                 <div class="container">
 
@@ -50,19 +51,38 @@
 
                                 <ul class="nav navbar-nav">
 
-                                    <li class="active"><a href="#headere-top" title="Home">Home</a></li>
+                                    <li class="active">
+                                    <a href="/" title="Início">Início</a>
+                                    </li>
 
-                                    <li><a href="#section-one" title="Overview">Overview</a></li>
+                                    <li>
+                                      <router-link to="/politicos">Políticos</router-link>
+                                    </li>
 
-                                    <li><a href="#section-two" title="Features">Features</a></li>
+                                    <li>
+                                      <a href="#section-two" title="Features">Features
+                                      </a>
+                                    </li>
 
-                                    <li><a href="#section-three" title="Pricing">Pricing</a></li>
+                                    <li>
+                                      <a href="#section-three" title="Pricing">Pricing
+                                      </a>
+                                    </li>
 
-                                    <li><a href="#section-four" title="Team">Team</a></li>
+                                    <li>
+                                      <a href="#section-four" title="Team">Team
+                                      </a>
+                                    </li>
 
-                                    <li><a href="#section-five" title="Contact">Contact</a></li>
+                                    <li>
+                                      <a href="#section-five" title="Contact">Contact
+                                      </a>
+                                    </li>
 
-                                    <li><a href="#section-six" title="Join Us">Join Us</a></li>
+                                    <li>
+                                      <a href="#section-six" title="Join Us">Join Us
+                                      </a>
+                                    </li>
 
                                 </ul>
 
@@ -82,7 +102,7 @@
 
             <!-- banner Text -->
 
-                 <section class="text-center">
+                 <section class="text-center" v-show="$route.name === 'home'">
 
 
                     <p><img class="img-responsive logo-ospoliticos" src="~assets/img/Logo.png" alt="Os politicos ponto com logo"></p>
@@ -101,7 +121,7 @@
 
             <!-- banner image -->
 
-        	<figure class="logo-ospoliticos-figure">
+        	<figure class="logo-ospoliticos-figure" v-show="$route.name === 'home'">
 
               <parallax class="parallax-window item tp-banner-container"
                 :speed-factor="0.7">
@@ -173,5 +193,9 @@ export default {
     width: 70px;
     height: 40px;
     text-align: left;
+}
+
+.navbar-margin {
+  margin-top: 54px; // navbar size
 }
 </style>

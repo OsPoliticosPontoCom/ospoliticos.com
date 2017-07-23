@@ -13,8 +13,19 @@
         </div>
         <div class="col-md-6 middle top-space full-height">
           cards com coisas que o politico já fez, noticias, comparacoes q já fizemos, ultimos twitts
+          <div ref="last-tweets" class="last-tweets" v-html="lastTweets">
+
+          </div>
         </div>
-        <div class="col-md-3 right top-space full-height">gráficos</div>
+        <div class="col-md-3 right top-space full-height">
+          <h3>Gastos</h3>
+          <label class="label">Transporte</label>
+          <el-progress :text-inside="true" :stroke-width="18" :percentage="35" status="success"></el-progress> <br>
+
+          <label class="label">Outros</label>
+          <el-progress :text-inside="true" :stroke-width="18" :percentage="65" status="success"></el-progress> <br>
+          <hr>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +65,7 @@
 //     "cpf": "",
 //     "sexo": "M",
 //     "urlWebsite": null,
-//     "redeSocial": [],
+//     "redeSocial": SIMILAR a isso [ "http://www.twitter.com/efraimfilho" ],
 //     "dataNascimento": "1946-07-05",
 //     "dataFalecimento": null,
 //     "ufNascimento": "SP",
@@ -63,25 +74,66 @@
 //   },
 //   "links": null
 // }
+
+// import Twitter from 'twitter'
+// const twitterFetcher = require('assets/js/twitterFetcher_min.js')
 export default {
   name: 'perfil',
   beforeRouteEnter (to, from, next) {
     console.log('to', to)
     next(async vm => {
-      // 3156 (andre amaral) should come from 'from'
-      // http://ops.net.br/api/deputado/3156/maioresfornecedores
-      // http://ops.net.br/api/deputado/3156/maioresnotas
-      // http://ops.net.br/api/deputado/3156/gastosmensaisporano
+      function handleTweets (tweets) {
+        console.log('tweets', tweets)
+        vm.lastTweets = tweets.map(tweet => {
+          return `
+          <div class="tweet">
+            ${tweet}
+          </div>
+          `
+        }).join('')
+      }
+
       const {id} = to.params
       // TODO get basePath for API
       const deputado = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}`)
       const result = await deputado.json()
       vm.politico = result.dados
+
+      // -- fetch twitters
+      if (vm.politico.redeSocial && vm.politico.redeSocial.length > 0) {
+        // TODO check if twitter
+        const twitterScreenName = vm.politico.redeSocial[0].split('/').slice(-1)[0] // get last string, the screen_name
+
+        // FROM http://www.jasonmayes.com/projects/twitterApi/#sthash.b7Ds9SC7.b9H8Ox9e.dpbs
+        // https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/js/exampleUsage.js
+        require('assets/js/twitterFetcher_min.js')
+
+        const configProfile = {
+          'profile': {'screenName': twitterScreenName},
+          'maxTweets': 5,
+          'enableLinks': true,
+          'showUser': true,
+          'showTime': true,
+          'showImages': true,
+          'lang': 'pt',
+          'customCallback': handleTweets
+        }
+        window.twitterFetcher.fetch(configProfile)
+      }
     })
+  },
+  mounted () {
+
+  },
+  watch () {
+    // lastTweets (newTweets) {
+
+    // }
   },
   data () {
     return {
-      politico: {}
+      politico: {},
+      lastTweets: ''
     }
   },
   components: {
@@ -99,7 +151,8 @@ export default {
 
 .perfil {
   margin-top: 54px;
-  background-color: #dadada;
+  background-color: #3c3636;
+  color: white;
 }
 
 .left {
@@ -112,5 +165,53 @@ export default {
 
 .top-space {
   padding-top: 20px;
+}
+
+
+</style>
+
+<style lang="scss">
+.last-tweets {
+  .tweet {
+    border: 1px solid white;
+    margin-bottom: 10px;
+    position: relative;
+    height: 116px;
+    color: white;
+    .user {
+      width: 15%;
+      position: absolute;
+      left: 0;
+      display: block;
+    }
+    .tweet {
+      width: 85%;
+      right: 0;
+      position: absolute;
+      display: block;
+    }
+    .interact {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: block;
+      a {
+        margin-right: 6px;
+        color: white;
+      }
+    }
+    .timePosted {
+      position: absolute;
+      bottom: 5px;
+      left: 20%;
+      color: white;
+    }
+    .media {
+      img {
+        display: none; // TODO fix height;
+        max-height: 330px;
+      }
+    }
+  }
 }
 </style>

@@ -33,6 +33,14 @@ Vue.use(VueFetch, {
 })
 Vue.config.productionTip = false
 
+// ELEMENT UI COMPONENTS
+// http://element.eleme.io/#/en-US/
+// https://github.com/ElemeFE/element/blob/dev/components.json
+import { Button, Select, Progress } from 'element-ui'
+Vue.component(Button.name, Button)
+Vue.component(Select.name, Select)
+Vue.component(Progress.name, Progress)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

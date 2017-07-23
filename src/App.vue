@@ -51,7 +51,7 @@
 
                                 <ul class="nav navbar-nav">
 
-                                    <li class="active">
+                                    <li>
                                     <a href="/" title="Início">Início</a>
                                     </li>
 

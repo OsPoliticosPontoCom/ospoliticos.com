@@ -25,6 +25,16 @@
           <label class="label">Outros</label>
           <el-progress :text-inside="true" :stroke-width="18" :percentage="65" status="success"></el-progress> <br>
           <hr>
+
+          <h3>Gastos Totais em 2017</h3>
+          R$ {{gastosTotais}}
+
+          <hr>
+
+          <h3>Lista de fornecedores</h3>
+          <div class="fornecedor text-left" v-for="fornecedor in listaDeMaioresFornecedoresSorted" :key="fornecedor.cnpjCpfFornecedor">
+            {{fornecedor.nomeFornecedor}} - Aparece {{fornecedor.count}} vezes
+          </div>
         </div>
       </div>
     </div>
@@ -77,6 +87,9 @@
 
 // import Twitter from 'twitter'
 // const twitterFetcher = require('assets/js/twitterFetcher_min.js')
+
+import {set, orderBy} from 'lodash'
+
 export default {
   name: 'perfil',
   beforeRouteEnter (to, from, next) {
@@ -120,6 +133,107 @@ export default {
         }
         window.twitterFetcher.fetch(configProfile)
       }
+
+      // --- despesas do ano atual (2017)
+      // let totalGastos = 0
+      let gastosPerPage = []
+      let gastos = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}/despesas?ano=2017&itens=100&ordem=ASC`)
+      let resultGastos = await gastos.json()
+      /*
+        "links": [
+          {
+          "rel": "self",
+          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=25&itens=10"
+          },
+          {
+          "rel": "next",
+          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=26&itens=10"
+          },
+          {
+          "rel": "first",
+          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=1&itens=10"
+          },
+          {
+          "rel": "last",
+          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=25&itens=10"
+          },
+          {
+          "rel": "previous",
+          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=24&itens=10"
+          }
+          ]
+      */
+      while (resultGastos.links.find(l => l.rel === 'self').href !== resultGastos.links.find(l => l.rel === 'last').href) {
+        gastosPerPage.push(resultGastos.dados)
+
+        // atualiza com o proximo link(pagina)
+        let nextLink = resultGastos.links.find(l => l.rel === 'next')
+        if (nextLink) {
+          gastos = await vm.$fetch.get(nextLink.href)
+          resultGastos = await gastos.json()
+        }
+      }
+
+      // repeat one last time for the last page
+      gastosPerPage.push(resultGastos.dados)
+
+      // atualiza com o proximo link(pagina)
+      let nextLink = resultGastos.links.find(l => l.rel === 'next')
+      if (nextLink) {
+        gastos = await vm.$fetch.get(nextLink.href)
+        resultGastos = await gastos.json()
+      }
+      vm.gastosPerPage = gastosPerPage
+      console.log('gastosPerPage', gastosPerPage)
+
+      // calcula gastos
+
+      vm.gastosTotais = gastosPerPage.reduce((prev, cur, idx, arr) => {
+        // cur == page, calcula todos os gastos e atualiza o contador dos fornecedores
+        return prev + cur.reduce((sum, gasto) => {
+          if (vm.listaDeMaioresFornecedores && vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor]) { // exists
+            vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor].count += 1
+          } else {
+            if (gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
+              set(vm.listaDeMaioresFornecedores, gasto.cnpjCpfFornecedor, {
+                dataDocumento: gasto.dataDocumento,
+                count: 1,
+                tipoDespesa: gasto.tipoDespesa,
+                nomeFornecedor: gasto.nomeFornecedor,
+                cnpjCpfFornecedor: gasto.cnpjCpfFornecedor
+              })
+            }
+          }
+
+          return sum + Number(gasto.valorDocumento)
+        }, 0)
+        /* gasto ==
+        // {
+        //     "ano": "2017",
+        //     "mes": "5",
+        //     "tipoDespesa": "Emissão Bilhete Aéreo",
+        //     "idDocumento": "",
+        //     "tipoDocumento": "Nota Fiscal",
+        //     "dataDocumento": "2017-05-22",
+        //     "numDocumento": "Bilhete: 957-4554.950935",
+        //     "valorDocumento": "200",
+        //     "urlDocumento": "",
+        //     "nomeFornecedor": "Cia Aérea - TAM",
+        //     "cnpjCpfFornecedor": "02012862000160",
+        //     "valorLiquido": "200",
+        //     "valorGlosa": "0",
+        //     "numRessarcimento": "0",
+        //     "idLote": "0",
+        //     "parcela": "0"
+        // }
+        */
+      }, 0)
+
+      // sorted array
+      console.log('vm.listaDeMaioresFornecedores', vm.listaDeMaioresFornecedores)
+      const fornecedoresValues = Object.values(vm.listaDeMaioresFornecedores)
+      console.log('fornecedoresValues', fornecedoresValues)
+      vm.listaDeMaioresFornecedoresSorted = orderBy(fornecedoresValues, 'count', 'desc')
     })
   },
   mounted () {
@@ -133,8 +247,14 @@ export default {
   data () {
     return {
       politico: {},
-      lastTweets: ''
+      lastTweets: '',
+      gastosPerPage: [],
+      listaDeMaioresFornecedores: {},
+      listaDeMaioresFornecedoresSorted: [],
+      gastosTotais: 0
     }
+  },
+  computed: {
   },
   components: {
   }
@@ -143,7 +263,7 @@ export default {
 
 <style lang="scss" scoped>
 .full-view-height {
-  height: 100vh;
+  // height: 100vh;
 }
 .full-height {
   height: 100%;

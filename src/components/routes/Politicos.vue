@@ -64,7 +64,7 @@ export default {
       // PB is the default
       vm.politicos = await getDeputadosFromUF('PB', vm.$fetch)
 
-      // estados
+      // estados(UFs)
       const estados = await vm.$fetch.get('https://dadosabertos.camara.leg.br/api/v2/referencias/uf')
       console.log('estados', estados)
       const resultEstados = await estados.json()
@@ -81,7 +81,7 @@ export default {
       politicos: [],
       proposicoes: [],
       estado: 'PB',
-      estados: ['PB', 'PE', 'SP', 'RJ'] // UFs, PB, PE, SP...
+      estados: ['PB', 'PE', 'SP', 'RJ'] // vem da API UFs, PB, PE, SP...
     }
   },
   methods: {

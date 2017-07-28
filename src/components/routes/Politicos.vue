@@ -12,12 +12,12 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-8" >
+      <div class="col-md-10" >
         <politico v-for="politico in politicos" :key="politico.id" :politico="politico">
         </politico>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-2">
         <h3>Últimas proposições dos deputados da(o) {{estado}}</h3>
         <hr>
         <div class="proposicao" v-for="proposicao in proposicoes" :key="proposicao.id">

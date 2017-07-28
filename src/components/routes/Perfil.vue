@@ -27,13 +27,28 @@
           <hr>
 
           <h3>Gastos Totais em 2017</h3>
-          R$ {{gastosTotais}}
+          R$ {{new numeral(gastosTotais).format('0,0.00')}}
 
           <hr>
 
-          <h3>Lista de fornecedores</h3>
-          <div class="fornecedor text-left" v-for="fornecedor in listaDeMaioresFornecedoresSorted" :key="fornecedor.cnpjCpfFornecedor">
-            {{fornecedor.nomeFornecedor}} - Aparece {{fornecedor.count}} vezes
+          <div class="fornecedores">
+            <table class="table">
+              <caption>Maiores gastos em 2017 por Fornecedores</caption>
+              <thead>
+                <tr>
+                  <th>Fornecedor</th>
+                  <th>Quantidade</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="fornecedor in listaDeMaioresFornecedoresSorted" :key="fornecedor.cnpjCpfFornecedor">
+                  <td>{{fornecedor.nomeFornecedor}}</td>
+                  <td>{{fornecedor.count}}</td>
+                  <td>R$ {{new numeral(fornecedor.totalValorLiquido).format('0,0.00')}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -89,7 +104,25 @@
 // const twitterFetcher = require('assets/js/twitterFetcher_min.js')
 
 import {set, orderBy} from 'lodash'
-
+const numeral = require('numeral')
+const language = {
+  delimiters: {
+    thousands: '.',
+    decimal: ','
+  },
+  abbreviations: {
+    thousand: 'mil',
+    million: 'milhões',
+    billion: 'b',
+    trillion: 't'
+  },
+  ordinal: function (number) {
+    return 'º'
+  },
+  currency: {
+    symbol: 'R$'
+  }
+}
 export default {
   name: 'perfil',
   beforeRouteEnter (to, from, next) {
@@ -192,7 +225,10 @@ export default {
         // cur == page, calcula todos os gastos e atualiza o contador dos fornecedores
         return prev + cur.reduce((sum, gasto) => {
           if (vm.listaDeMaioresFornecedores && vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor]) { // exists
-            vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor].count += 1
+            let fornecedor = vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor]
+            fornecedor.count += 1
+            fornecedor.totalValorLiquido += Number(gasto.valorLiquido)
+            fornecedor.totalValorDocumento += Number(gasto.valorDocumento)
           } else {
             if (gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
               set(vm.listaDeMaioresFornecedores, gasto.cnpjCpfFornecedor, {
@@ -200,7 +236,9 @@ export default {
                 count: 1,
                 tipoDespesa: gasto.tipoDespesa,
                 nomeFornecedor: gasto.nomeFornecedor,
-                cnpjCpfFornecedor: gasto.cnpjCpfFornecedor
+                cnpjCpfFornecedor: gasto.cnpjCpfFornecedor,
+                totalValorDocumento: Number(gasto.valorDocumento),
+                totalValorLiquido: Number(gasto.valorLiquido)
               })
             }
           }
@@ -233,11 +271,12 @@ export default {
       console.log('vm.listaDeMaioresFornecedores', vm.listaDeMaioresFornecedores)
       const fornecedoresValues = Object.values(vm.listaDeMaioresFornecedores)
       console.log('fornecedoresValues', fornecedoresValues)
-      vm.listaDeMaioresFornecedoresSorted = orderBy(fornecedoresValues, 'count', 'desc')
+      vm.listaDeMaioresFornecedoresSorted = orderBy(fornecedoresValues, ['totalValorLiquido', 'count'], ['desc', 'desc'])
     })
   },
   mounted () {
-
+    numeral.language('pt-br', language)
+    numeral.language('pt-br')
   },
   watch () {
     // lastTweets (newTweets) {
@@ -251,7 +290,8 @@ export default {
       gastosPerPage: [],
       listaDeMaioresFornecedores: {},
       listaDeMaioresFornecedoresSorted: [],
-      gastosTotais: 0
+      gastosTotais: 0,
+      numeral
     }
   },
   computed: {

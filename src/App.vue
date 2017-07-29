@@ -148,7 +148,6 @@ import Parallax from 'vue-parallaxy'
 export default {
   name: 'app',
   mounted () {
-
   },
   components: {
     navbar: NavBar,

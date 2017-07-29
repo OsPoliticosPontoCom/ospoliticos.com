@@ -14,7 +14,7 @@
         <div class="col-md-6 middle top-space full-height">
           <el-card class="box-card">
             <p>
-              O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisOutro).format(FORMATO)}}
+              O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisAnoAnterior).format(FORMATO)}}
             </p>
             <button class="btn btn-primary pull-right">
               Compartilhar no Twitter
@@ -47,7 +47,7 @@
           <hr>
 
           <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-          <el-progress v-if="gastosTotaisOutro" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisOutro) * 100).toFixed(2)" status="success"></el-progress> <br>
+          <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisAnoAnterior) * 100).toFixed(2)" status="success"></el-progress> <br>
 
           <hr>
 
@@ -127,6 +127,26 @@ import {despesasDeputadoPorAno, getDeputadosFromUF, normalizeText} from 'assets/
 import {sampleSize, groupBy} from 'lodash'
 const numeral = require('numeral')
 const FORMATO = '$ 0,0.00'
+const LocalStorageDB = require('localStorageDB')
+const DB = new LocalStorageDB('os_politicos', localStorage)
+if (DB.isNew()) {
+  console.log('criando table gastoDeputado')
+  DB.createTable('gastoDeputado', [
+    'idDeputado',
+    'dataDocumento',
+    'count',
+    'tipoDespesa',
+    'nomeFornecedor',
+    'cnpjCpfFornecedor',
+    'totalValorDocumento',
+    'totalValorLiquido',
+    'ano',
+    'mes',
+    'tipoDocumento'
+  ])
+  DB.commit()
+}
+
 export default {
   name: 'perfil',
   beforeRouteEnter (to, from, next) {
@@ -173,16 +193,15 @@ export default {
       }
 
       // --- despesas do ano (2017)
-      let gastosPorFornecedores = await despesasDeputadoPorAno(id, vm.$fetch, '2017')
-      console.log('gastosPorFornecedores', gastosPorFornecedores)
+      const gastosPorFornecedores = await despesasDeputadoPorAno(id, DB, vm.$fetch, '2017')
       vm.gastosPorFornecedores = gastosPorFornecedores
-      vm.gastosTotais = gastosPorFornecedores.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+      vm.gastosTotais = vm.gastosPorFornecedores.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
       // --- despesas do ano (2016)
-      let gastosPorFornecedoresOutro = await despesasDeputadoPorAno(id, vm.$fetch, '2016')
-      console.log('gastosPorFornecedoresOutro', gastosPorFornecedoresOutro)
-      vm.gastosPorFornecedoresOutro = gastosPorFornecedoresOutro
-      vm.gastosTotaisOutro = gastosPorFornecedoresOutro.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+      let gastosAnoAnterior = await despesasDeputadoPorAno(id, DB, vm.$fetch, '2016')
+      vm.gastosAnoAnterior = gastosAnoAnterior
+      vm.gastosTotaisAnoAnterior = gastosAnoAnterior.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+
       // TODO
       // verificar se ja existe no "banco"
       // procurar outros 2
@@ -191,20 +210,15 @@ export default {
       // separar as comparacoes pra n ficar deputadoOutro
 
       // -- coleta outros deputados para comparar
-      console.log('deputado', deputado)
       let deputadosDoMesmoUF = await getDeputadosFromUF(deputado.ufNascimento, vm.$fetch)
-      console.log('deputadosDoMesmoUF', deputadosDoMesmoUF)
-      // remove o deputado atual
-      // n funciona TODO checkar isso
+      // n considera o deputado atual
       deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== id)
       const outrosDeputados = sampleSize(deputadosDoMesmoUF, 2)
-      console.log('outrosDeputados', outrosDeputados)
       vm.politicoOutro = outrosDeputados[0]
       vm.politicoOutro2 = outrosDeputados[1]
 
       // --- despesas do ano (2017) para politicoOutro
-      let gastosPorFornecedoresPolitico2 = await despesasDeputadoPorAno(vm.politicoOutro.id, vm.$fetch, '2017')
-      console.log('gastosPorFornecedoresPolitico2', gastosPorFornecedoresPolitico2)
+      let gastosPorFornecedoresPolitico2 = await despesasDeputadoPorAno(vm.politicoOutro.id, DB, vm.$fetch, '2017')
       let gastosTotaisPolitico2 = gastosPorFornecedoresPolitico2.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
       const comp1 = `O deputado ${deputado.ultimoStatus.nomeEleitoral} do ${deputado.ultimoStatus.siglaPartido} gastou ${Number(vm.gastosTotais / gastosTotaisPolitico2).toFixed(2)} vezes ${vm.gastosTotais - gastosTotaisPolitico2 > 0 ? 'mais' : 'menos'} (${numeral(vm.gastosTotais - gastosTotaisPolitico2).format(FORMATO)}) do que o deputado ${vm.politicoOutro.nome} do ${vm.politicoOutro.siglaPartido} em 2017` // TODO encontrar o maior
@@ -248,9 +262,9 @@ export default {
       lastTweets: '',
       gastosPerPage: [],
       gastosPorFornecedores: [],
-      gastosPorFornecedoresOutro: [],
+      gastosAnoAnterior: [],
       gastosTotais: 0,
-      gastosTotaisOutro: 0,
+      gastosTotaisAnoAnterior: 0,
       numeral,
       FORMATO,
       comparacoes: []

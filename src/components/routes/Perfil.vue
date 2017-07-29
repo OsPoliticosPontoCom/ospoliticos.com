@@ -12,7 +12,25 @@
           </div>
         </div>
         <div class="col-md-6 middle top-space full-height">
-          cards com coisas que o politico já fez, noticias, comparacoes q já fizemos, ultimos twitts
+          <el-card class="box-card">
+            <p>
+              O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisOutro).format(FORMATO)}}
+            </p>
+            <button class="btn btn-primary pull-right">
+              Compartilhar no Twitter
+            </button>
+          </el-card>
+
+          <el-card class="box-card" v-for="comparacao in comparacoes">
+            <p>
+              {{comparacao}}
+            </p>
+            <button class="btn btn-primary pull-right">
+              Compartilhar no Twitter
+            </button>
+          </el-card>
+
+          <!-- ultimos tweets do deputado(se existir em deputado.redeSocial) -->
           <div ref="last-tweets" class="last-tweets" v-html="lastTweets">
 
           </div>
@@ -27,7 +45,12 @@
           <hr>
 
           <h3>Gastos Totais em 2017</h3>
-          R$ {{new numeral(gastosTotais).format('0,0.00')}}
+          {{new numeral(gastosTotais).format(FORMATO)}}
+
+          <hr>
+
+          <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
+          <el-progress v-if="gastosTotaisOutro" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisOutro) * 100).toFixed(2)" status="success"></el-progress> <br>
 
           <hr>
 
@@ -37,15 +60,15 @@
               <thead>
                 <tr>
                   <th>Fornecedor</th>
-                  <th>Quantidade</th>
                   <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="fornecedor in listaDeMaioresFornecedoresSorted" :key="fornecedor.cnpjCpfFornecedor">
+                <tr v-for="fornecedor in gastosPorFornecedores" :key="fornecedor.cnpjCpfFornecedor">
                   <td>{{fornecedor.nomeFornecedor}}</td>
-                  <td>{{fornecedor.count}}</td>
-                  <td>R$ {{new numeral(fornecedor.totalValorLiquido).format('0,0.00')}}</td>
+                  <td width="40%">
+                    <span v-if="fornecedor.totalValorLiquido">{{new numeral(fornecedor.totalValorLiquido).format(FORMATO)}}</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -103,26 +126,10 @@
 // import Twitter from 'twitter'
 // const twitterFetcher = require('assets/js/twitterFetcher_min.js')
 
-import {set, orderBy} from 'lodash'
+import {despesasDeputadoPorAno, getDeputadosFromUF} from 'assets/js/helpers'
+import {sampleSize} from 'lodash'
 const numeral = require('numeral')
-const language = {
-  delimiters: {
-    thousands: '.',
-    decimal: ','
-  },
-  abbreviations: {
-    thousand: 'mil',
-    million: 'milhões',
-    billion: 'b',
-    trillion: 't'
-  },
-  ordinal: function (number) {
-    return 'º'
-  },
-  currency: {
-    symbol: 'R$'
-  }
-}
+const FORMATO = '$ 0,0.00'
 export default {
   name: 'perfil',
   beforeRouteEnter (to, from, next) {
@@ -141,9 +148,10 @@ export default {
 
       const {id} = to.params
       // TODO get basePath for API
-      const deputado = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}`)
+      let deputado = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}`)
       const result = await deputado.json()
-      vm.politico = result.dados
+      deputado = result.dados
+      vm.politico = deputado
 
       // -- fetch twitters
       if (vm.politico.redeSocial && vm.politico.redeSocial.length > 0) {
@@ -167,116 +175,68 @@ export default {
         window.twitterFetcher.fetch(configProfile)
       }
 
-      // --- despesas do ano atual (2017)
-      // let totalGastos = 0
-      let gastosPerPage = []
-      let gastos = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}/despesas?ano=2017&itens=100&ordem=ASC`)
-      let resultGastos = await gastos.json()
-      /*
-        "links": [
-          {
-          "rel": "self",
-          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=25&itens=10"
-          },
-          {
-          "rel": "next",
-          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=26&itens=10"
-          },
-          {
-          "rel": "first",
-          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=1&itens=10"
-          },
-          {
-          "rel": "last",
-          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=25&itens=10"
-          },
-          {
-          "rel": "previous",
-          "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/141536/despesas?ano=2017&pagina=24&itens=10"
-          }
-          ]
-      */
-      while (resultGastos.links.find(l => l.rel === 'self').href !== resultGastos.links.find(l => l.rel === 'last').href) {
-        gastosPerPage.push(resultGastos.dados)
+      // --- despesas do ano (2017)
+      let gastosPorFornecedores = await despesasDeputadoPorAno(id, vm.$fetch, '2017')
+      console.log('gastosPorFornecedores', gastosPorFornecedores)
+      vm.gastosPorFornecedores = gastosPorFornecedores
+      vm.gastosTotais = gastosPorFornecedores.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
-        // atualiza com o proximo link(pagina)
-        let nextLink = resultGastos.links.find(l => l.rel === 'next')
-        if (nextLink) {
-          gastos = await vm.$fetch.get(nextLink.href)
-          resultGastos = await gastos.json()
-        }
-      }
+      // --- despesas do ano (2016)
+      let gastosPorFornecedoresOutro = await despesasDeputadoPorAno(id, vm.$fetch, '2016')
+      console.log('gastosPorFornecedoresOutro', gastosPorFornecedoresOutro)
+      vm.gastosPorFornecedoresOutro = gastosPorFornecedoresOutro
+      vm.gastosTotaisOutro = gastosPorFornecedoresOutro.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+      // TODO
+      // verificar se ja existe no "banco"
+      // procurar outros 2
+      // salvar no "banco"
+      // comparar
+      // separar as comparacoes pra n ficar deputadoOutro
 
-      // repeat one last time for the last page
-      gastosPerPage.push(resultGastos.dados)
+      // -- coleta outros deputados para comparar
+      console.log('deputado', deputado)
+      let deputadosDoMesmoUF = await getDeputadosFromUF(deputado.ufNascimento, vm.$fetch)
+      console.log('deputadosDoMesmoUF', deputadosDoMesmoUF)
+      // remove o deputado atual
+      // n funciona TODO checkar isso
+      deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== id)
+      const outrosDeputados = sampleSize(deputadosDoMesmoUF, 2)
+      console.log('outrosDeputados', outrosDeputados)
+      vm.politicoOutro = outrosDeputados[0]
+      vm.politicoOutro2 = outrosDeputados[1]
 
-      // atualiza com o proximo link(pagina)
-      let nextLink = resultGastos.links.find(l => l.rel === 'next')
-      if (nextLink) {
-        gastos = await vm.$fetch.get(nextLink.href)
-        resultGastos = await gastos.json()
-      }
-      vm.gastosPerPage = gastosPerPage
-      console.log('gastosPerPage', gastosPerPage)
+      // --- despesas do ano (2017) para politicoOutro
+      let gastosPorFornecedoresPolitico2 = await despesasDeputadoPorAno(vm.politicoOutro.id, vm.$fetch, '2017')
+      console.log('gastosPorFornecedoresPolitico2', gastosPorFornecedoresPolitico2)
+      let gastosTotaisPolitico2 = gastosPorFornecedoresPolitico2.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
-      // calcula gastos
+      const comp1 = `O deputado ${deputado.ultimoStatus.nomeEleitoral} do ${deputado.ultimoStatus.siglaPartido} gastou ${Number(vm.gastosTotais / gastosTotaisPolitico2).toFixed(2)} vezes ${vm.gastosTotais - gastosTotaisPolitico2 > 0 ? 'mais' : 'menos'} (${numeral(vm.gastosTotais - gastosTotaisPolitico2).format(FORMATO)}) do que o deputado ${vm.politicoOutro.nome} do ${vm.politicoOutro.siglaPartido} em 2017` // TODO encontrar o maior
 
-      vm.gastosTotais = gastosPerPage.reduce((prev, cur, idx, arr) => {
-        // cur == page, calcula todos os gastos e atualiza o contador dos fornecedores
-        return prev + cur.reduce((sum, gasto) => {
-          if (vm.listaDeMaioresFornecedores && vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor]) { // exists
-            let fornecedor = vm.listaDeMaioresFornecedores[gasto.cnpjCpfFornecedor]
-            fornecedor.count += 1
-            fornecedor.totalValorLiquido += Number(gasto.valorLiquido)
-            fornecedor.totalValorDocumento += Number(gasto.valorDocumento)
-          } else {
-            if (gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
-              set(vm.listaDeMaioresFornecedores, gasto.cnpjCpfFornecedor, {
-                dataDocumento: gasto.dataDocumento,
-                count: 1,
-                tipoDespesa: gasto.tipoDespesa,
-                nomeFornecedor: gasto.nomeFornecedor,
-                cnpjCpfFornecedor: gasto.cnpjCpfFornecedor,
-                totalValorDocumento: Number(gasto.valorDocumento),
-                totalValorLiquido: Number(gasto.valorLiquido)
-              })
-            }
-          }
-
-          return sum + Number(gasto.valorDocumento)
-        }, 0)
-        /* gasto ==
-        // {
-        //     "ano": "2017",
-        //     "mes": "5",
-        //     "tipoDespesa": "Emissão Bilhete Aéreo",
-        //     "idDocumento": "",
-        //     "tipoDocumento": "Nota Fiscal",
-        //     "dataDocumento": "2017-05-22",
-        //     "numDocumento": "Bilhete: 957-4554.950935",
-        //     "valorDocumento": "200",
-        //     "urlDocumento": "",
-        //     "nomeFornecedor": "Cia Aérea - TAM",
-        //     "cnpjCpfFornecedor": "02012862000160",
-        //     "valorLiquido": "200",
-        //     "valorGlosa": "0",
-        //     "numRessarcimento": "0",
-        //     "idLote": "0",
-        //     "parcela": "0"
-        // }
-        */
-      }, 0)
-
-      // sorted array
-      console.log('vm.listaDeMaioresFornecedores', vm.listaDeMaioresFornecedores)
-      const fornecedoresValues = Object.values(vm.listaDeMaioresFornecedores)
-      console.log('fornecedoresValues', fornecedoresValues)
-      vm.listaDeMaioresFornecedoresSorted = orderBy(fornecedoresValues, ['totalValorLiquido', 'count'], ['desc', 'desc'])
+      vm.comparacoes = [comp1]
+      // set timeout
     })
   },
   mounted () {
-    numeral.language('pt-br', language)
-    numeral.language('pt-br')
+    numeral.register('locale', 'brasil', {
+      delimiters: {
+        thousands: '.',
+        decimal: ','
+      },
+      abbreviations: {
+        thousand: 'mil',
+        million: 'milhões',
+        billion: 'b',
+        trillion: 't'
+      },
+      ordinal: function (number) {
+        return 'º'
+      },
+      currency: {
+        symbol: 'R$'
+      }
+    })
+    numeral.locale('brasil')
+    this.numeral = numeral
   },
   watch () {
     // lastTweets (newTweets) {
@@ -286,12 +246,18 @@ export default {
   data () {
     return {
       politico: {},
+      politicoOutro: {},
+      politicoOutro2: {},
       lastTweets: '',
       gastosPerPage: [],
       listaDeMaioresFornecedores: {},
-      listaDeMaioresFornecedoresSorted: [],
+      gastosPorFornecedores: [],
+      gastosPorFornecedoresOutro: [],
       gastosTotais: 0,
-      numeral
+      gastosTotaisOutro: 0,
+      numeral,
+      FORMATO,
+      comparacoes: []
     }
   },
   computed: {
@@ -302,9 +268,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.full-view-height {
-  // height: 100vh;
-}
 .full-height {
   height: 100%;
 }
@@ -327,6 +290,11 @@ export default {
   padding-top: 20px;
 }
 
+.box-card {
+  color: black;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
 
 </style>
 

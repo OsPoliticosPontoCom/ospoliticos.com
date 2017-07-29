@@ -40,11 +40,10 @@
           <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
 
           <br>
-          <label class="label">Transporte</label>
-          <el-progress :text-inside="true" :stroke-width="18" :percentage="35" status="success"></el-progress> <br>
-
-          <label class="label">Outros</label>
-          <el-progress :text-inside="true" :stroke-width="18" :percentage="65" status="success"></el-progress> <br>
+          <div class="gasto-por-dispesa" v-for="(gasto, index) in gastosPorFornecedoresGrouped" :key="index">
+            <label class="label">{{gasto.tipoDespesa}}</label>
+            <el-progress :text-inside="true" :stroke-width="18" :percentage="Number(gasto.percentage)" status="success"></el-progress>
+          </div>
           <hr>
 
           <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
@@ -124,8 +123,8 @@
 // import Twitter from 'twitter'
 // const twitterFetcher = require('assets/js/twitterFetcher_min.js')
 
-import {despesasDeputadoPorAno, getDeputadosFromUF} from 'assets/js/helpers'
-import {sampleSize} from 'lodash'
+import {despesasDeputadoPorAno, getDeputadosFromUF, normalizeText} from 'assets/js/helpers'
+import {sampleSize, groupBy} from 'lodash'
 const numeral = require('numeral')
 const FORMATO = '$ 0,0.00'
 export default {
@@ -248,7 +247,6 @@ export default {
       politicoOutro2: {},
       lastTweets: '',
       gastosPerPage: [],
-      listaDeMaioresFornecedores: {},
       gastosPorFornecedores: [],
       gastosPorFornecedoresOutro: [],
       gastosTotais: 0,
@@ -259,6 +257,20 @@ export default {
     }
   },
   computed: {
+    gastosPorFornecedoresGrouped () {
+      if (this.gastosTotais <= 0) return
+      const gastosGrouped = groupBy(this.gastosPorFornecedores, (g) => normalizeText(g.tipoDespesa) || 'Outros')
+      return Object.entries(gastosGrouped).map(
+        ([tipoDespesa, gastos]) => {
+          const total = gastos.reduce((prev, curr) => prev + Number(curr.totalValorLiquido), 0)
+          return {
+            tipoDespesa,
+            total,
+            percentage: Number((total / this.gastosTotais) * 100).toFixed(2)
+          }
+        }
+      )
+    }
   },
   components: {
   }
@@ -297,6 +309,9 @@ export default {
 </style>
 
 <style lang="scss">
+.el-progress-bar__innerText {
+  color: black;
+}
 .last-tweets {
   .tweet {
     border: 1px solid white;

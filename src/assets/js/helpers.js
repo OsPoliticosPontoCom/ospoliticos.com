@@ -1,4 +1,8 @@
-import {set, orderBy} from 'lodash'
+import {set, orderBy, startCase, toLower} from 'lodash'
+
+function normalizeText (str) {
+  return startCase(toLower(str))
+}
 
 async function despesasDeputadoPorAno (
   idDeputado,
@@ -129,7 +133,7 @@ async function getDeputadosProposicoesFromUF (uf, fetch) {
   return result.dados
 }
 
-export {despesasDeputadoPorAno, getDeputadosFromUF, getDeputadosProposicoesFromUF}
+export {despesasDeputadoPorAno, getDeputadosFromUF, getDeputadosProposicoesFromUF, normalizeText}
 
 /*
 Deputado

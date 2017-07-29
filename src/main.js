@@ -42,6 +42,36 @@ Vue.component(Select.name, Select)
 Vue.component(Progress.name, Progress)
 Vue.component(Card.name, Card)
 
+const LocalStorageDB = require('localStorageDB')
+const DB = new LocalStorageDB('database', localStorage)
+console.log('DB', DB)
+if (DB.isNew()) {
+  // ID:1 Transporte
+  DB.createTable('categoriaFornecedor', ['nome'])
+  // ID:1 nome:Tam cnpjCpfFornecedor:12345678911 idCategoria:1
+  DB.createTable('fornecedor', ['nome', 'cnpjCpfFornecedor', 'idCategoria'])
+  // ID:1 nome:Tam cnpjCpfFornecedor:12345678911 idCategoria:1
+  // DB.createTable('fornecedor', ['nome', 'cnpjCpfFornecedor', 'idCategoria'])
+
+  // insere seed de categorias do fornecededor
+  // categorias fornecedor
+  DB.insert('categoriaFornecedor', {nome: 'Transporte'})
+  DB.insert('categoriaFornecedor', {nome: 'Telefonia'})
+
+  // fornecedores
+  DB.insert('fornecedor', {nome: 'Cia Aérea - TAM', 'cnpjCpfFornecedor': '02012862000160', 'idCategoria': 1})
+  DB.insert('fornecedor', {nome: 'Cia Aérea - AVIANCA', 'cnpjCpfFornecedor': '02575829000148', 'idCategoria': 1})
+
+  DB.insert('fornecedor', {nome: 'Cia Aérea - AVIANCA', 'cnpjCpfFornecedor': '02575829000148', 'idCategoria': 1})
+
+  // salva
+  DB.commit()
+} else { // not new, tests
+  console.log('DB.queryAll(\'categoriaFornecedor\')', DB.queryAll('categoriaFornecedor'))
+  console.log('DB.queryAll 2', DB.queryAll('categoriaFornecedor', {query: {ID: 1}}))
+  console.log('not new')
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

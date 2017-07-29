@@ -6,6 +6,7 @@ function normalizeText (str) {
 
 async function despesasDeputadoPorAno (
   idDeputado,
+  DB = null,
   fetch = false,
   ano = '2017',
   itens = 100,
@@ -14,6 +15,27 @@ async function despesasDeputadoPorAno (
   if (!fetch) {
     console.error('Você precisa passar uma lib/função para fazer o fetch. Recomenda-se a whatwg-fetch')
     return
+  }
+
+  if (!DB) {
+    console.log('Precisa da Lib LocalStorageDB')
+    return
+  }
+  // check for cache
+  let existeNoCache = false
+  try {
+    existeNoCache = DB.queryAll('gastoDeputado', {
+      query: {idDeputado, ano},
+      limit: 1
+    }).length > 0
+  } catch (error) {
+    console.error('erro testando o cache', error)
+  }
+  if (existeNoCache) {
+    console.log('retornando do cache')
+    return DB.queryAll('gastoDeputado', {
+      query: {idDeputado, ano}
+    })
   }
   // a API da camara retorna as despesas em pagina de até 100 itens
   let gastosPorPagina = []
@@ -52,6 +74,7 @@ async function despesasDeputadoPorAno (
       // pode vim vazio
       if (gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
         set(fornecedoresDict, gasto.cnpjCpfFornecedor, {
+          idDeputado,
           dataDocumento: gasto.dataDocumento,
           count: 1,
           tipoDespesa: gasto.tipoDespesa,
@@ -67,7 +90,19 @@ async function despesasDeputadoPorAno (
     }
   }
   const fornecedoresValues = Object.values(fornecedoresDict)
-  return orderBy(fornecedoresValues, ['totalValorLiquido', 'count'], ['desc', 'desc']) // [{gasto}]
+  const gastosOrdenados = orderBy(fornecedoresValues, ['totalValorLiquido', 'count'], ['desc', 'desc']) // [{gasto}]
+
+  try {
+    for (let i = 0; i < gastosOrdenados.length; i++) {
+      let gasto = gastosOrdenados[i]
+      DB.insert('gastoDeputado', gasto)
+    }
+    DB.commit()
+    return gastosOrdenados
+  } catch (error) {
+    console.error('erro ao salvar no cache')
+    return gastosOrdenados
+  }
 }
 
 /*

@@ -54,39 +54,51 @@
           </div>
         </div>
         <div class="col-md-4 right top-space full-height">
-          <h3>Gastos em 2017</h3>
-          <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
 
-          <br>
-          <div class="gasto-por-dispesa" v-for="(gasto, index) in gastosPorFornecedoresGrouped" :key="index">
-            <label class="label">{{gasto.tipoDespesa}}</label>
-            <el-progress :text-inside="true" :stroke-width="18" :percentage="Number(gasto.percentage)" status="success"></el-progress>
+          <div class="row gastos">
+            <div class="col-md-12">
+              <h3>Gastos em 2017</h3>
+              <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
+
+              <br>
+              <div class="gasto-por-dispesa" v-for="(gasto, index) in gastosPorFornecedoresGrouped" :key="index">
+                <label class="label">{{gasto.tipoDespesa}}</label>
+                <el-progress :text-inside="true" :stroke-width="18" :percentage="Number(gasto.percentage)" status="success"></el-progress>
+              </div>
+              <hr>
+            </div>
           </div>
-          <hr>
 
-          <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-          <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisAnoAnterior) * 100).toFixed(2)" status="success"></el-progress> <br>
+          <div class="row gastos gastos-anterior">
+            <div class="col-md-12">
+              <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
+              <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisAnoAnterior) * 100).toFixed(2)" status="success"></el-progress>
+              <hr>
+            </div>
+          </div>
 
-          <hr>
-
-          <div class="fornecedores">
-            <table class="table">
-              <caption>Maiores gastos em 2017 por Fornecedores</caption>
-              <thead>
-                <tr>
-                  <th>Fornecedor</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="fornecedor in gastosPorFornecedores" :key="fornecedor.cnpjCpfFornecedor">
-                  <td>{{fornecedor.nomeFornecedor}}</td>
-                  <td width="40%">
-                    <span v-if="fornecedor.totalValorLiquido">{{new numeral(fornecedor.totalValorLiquido).format(FORMATO)}}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="row gastos">
+            <div class="col-md-12">
+              <div class="fornecedores">
+                <table class="table">
+                  <caption>Maiores gastos em 2017 por Fornecedores</caption>
+                  <thead>
+                    <tr>
+                      <th>Fornecedor</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="fornecedor in gastosPorFornecedores" :key="fornecedor.cnpjCpfFornecedor">
+                      <td>{{fornecedor.nomeFornecedor}}</td>
+                      <td width="40%">
+                        <span v-if="fornecedor.totalValorLiquido">{{new numeral(fornecedor.totalValorLiquido).format(FORMATO)}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -312,6 +324,14 @@ export default {
 <style lang="scss" scoped>
 .full-height {
   height: 100%;
+}
+
+.gastos {
+  margin-bottom: 30px;
+}
+
+.gastos.gastos-anterior h3 {
+  margin-bottom: 15px;
 }
 
 .share-section {

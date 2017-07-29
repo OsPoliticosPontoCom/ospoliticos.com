@@ -1,14 +1,31 @@
 <template>
 <div class="politicos navbar-margin">
 
-  <input type="text" v-model="nome" class="input">
-  <br>
-  Estado
-  <select v-model="estado">
-    <option disabled value="">Estado</option>
-    <option :value="estado.sigla" v-for="estado in estados" :key="estado.id">{{estado.nome}}</option>
-  </select>
-  <br>
+  <!-- <input type="text" v-model="nome" class="input"> -->
+  <div class="politicos-filtro">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3" style="margin-left: 15px;">
+              <label>Estado</label>
+              <select class="select-estado" v-model="estado">
+                <option disabled value="">Estado</option>
+                <option :value="estado.sigla" v-for="estado in estados" :key="estado.id">{{estado.nome}}</option>
+              </select>
+            </div>
+            <!-- <div class="col-md-3">
+              <label>Partido</label>
+              <select class="select-estado" v-model="partido">
+                <option disabled value="">Partido</option>
+                <option :value="partido.sigla" v-for="partido in partidos" :key="partido.id">{{partido.sigla}}</option>
+              </select>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
     <div class="row">
@@ -42,6 +59,12 @@ import Politico from './Politico.vue'
 // PODE SER UTIL https://github.com/coderdiaz/vue-datasource
 import InfiniteLoading from 'vue-infinite-loading'
 
+// async function getDeputadosFromPartido (partido, fetch) {
+//   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaPartido=${partido}&itens=99&ordem=ASC&ordenarPor=nome`)
+//   const result = await deputados.json()
+//   return result.dados
+// }
+
 async function getDeputadosFromUF (uf, fetch) {
   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=99&ordem=ASC&ordenarPor=nome`)
   const result = await deputados.json()
@@ -69,6 +92,12 @@ export default {
       console.log('estados', estados)
       const resultEstados = await estados.json()
       vm.estados = resultEstados.dados
+
+      // partidos
+      const partidos = await vm.$fetch.get('https://dadosabertos.camara.leg.br/api/v2/partidos?itens=100&ordem=ASC&ordenarPor=sigla')
+      console.log('partidos', partidos)
+      const resultPartidos = await partidos.json()
+      vm.partidos = resultPartidos.dados
 
       // proposicoes
       vm.proposicoes = await getDeputadosProposicoesFromUF('PB', vm.$fetch)

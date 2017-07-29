@@ -13,6 +13,7 @@ import 'assets/startup-theme/css/bootstrap.min.css'
 import 'assets/startup-theme/css/font-awesome.min.css'
 import 'assets/startup-theme/css/style.css'
 import 'assets/startup-theme/css/owl.carousel.css'
+import 'assets/css/app.css'
 
 // responsive
 import 'assets/startup-theme/css/responsive.css'

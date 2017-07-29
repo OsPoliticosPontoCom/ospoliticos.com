@@ -7,15 +7,14 @@
     <div class="panel-body">
       <div>
         <div class="row">
-          <div class="col-md-4" v-if="id">
-
+          <div class="col-md-6" v-if="id">
             <router-link :to="{ name: 'politico', params: { id }}">
               <img :src="urlFoto" :alt="nome">
             </router-link>
           </div>
-          <div class="col-md-8 text-left">
-            Partido: {{siglaPartido}}  <br>
-            Uf: {{siglaUf}}  <br>
+          <div class="col-md-6 text-left">
+            <strong>Partido:</strong> {{siglaPartido}}  <br>
+            <strong>Uf:</strong> {{siglaUf}}  <br>
             <hr>
           </div>
         </div>

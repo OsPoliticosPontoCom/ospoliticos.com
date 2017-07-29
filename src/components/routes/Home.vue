@@ -17,35 +17,35 @@
 
                 	<ul class="row">
 
-                    	<li class="col-xs-12 col-sm-3 col-md-2 col-lg-2 ">Trusted by</li>
+                    	<li class="col-xs-12 col-sm-3 col-md-2 col-lg-2 ">Apoio:</li>
 
                         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-2 ">
 
-                        	<a href="#"><img src="~assets/startup-theme/images/logoes/logoes-1.png" alt="" class="img-responsive"/></a>
+                        	<a href="#"><img src="~assets/img/logo-posfit.png" alt="" class="img-responsive"/></a>
 
                         </li>
 
                         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-2">
 
-                        	<a href="#"><img src="~assets/startup-theme/images/logoes/logoes-2.png" alt="" class="img-responsive"/></a>
+                        	<a href="#"><img src="" alt="" class="img-responsive"/></a>
 
                         </li>
 
                         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-2">
 
-                        	<a href="#"><img src="~assets/startup-theme/images/logoes/logoes-3.png" alt="" class="img-responsive"/></a>
+                        	<a href="#"><img src="" alt="" class="img-responsive"/></a>
 
                         </li>
 
                         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-2">
 
-                        	<a href="#"><img src="~assets/startup-theme/images/logoes/logoes-4.png" alt="" class="img-responsive"/></a>
+                        	<a href="#"><img src="" alt="" class="img-responsive"/></a>
 
                         </li>
 
                         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-2">
 
-                        	<a href="#"><img src="~assets/startup-theme/images/logoes/logoes-5.png" alt="" class="img-responsive"/></a>
+                        	<a href="#"><img src="" alt="" class="img-responsive"/></a>
 
                         </li>
 
@@ -67,77 +67,32 @@
 
                 	<header role="title-page">
 
-                        <h4>What we do</h4>
-
-                        <h2>We make your business gain more<br/>revenue at a glance.</h2>
+                        <h2>De olho neles</h2>
 
                     </header>
 
-                    <article>
+                    <article style="text-align: justify;">
 
-                    	<p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo risus, porta ac consectetur ac, ves<br/>
-
-                        tibulum at eros. Vestibulum id ligula porta felis euismod semper. Nulla vitae elit libero, a pharetra augue.<br/>
-
-                        Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Maecenas mollis interdum!</p>
+                    	<p>Preocupados com a dificuldade de formação de uma visão sobre a atividade dos agentes
+                        políticos da nação, desenvolvemos uma plataforma que busca concentrar informações uteis
+                        em torno da efetiva e responsável atuação dos congressistas. Seu trabalho é reger o
+                        ordenamento do país, fiscalizar o Executivo, delimitar prioridades e gastos públicos, entre
+                        outros, e o nosso, é ficar de olho neles.
+                        <br>
+                        O nosso objetivo paira em torno da facilitação do acesso dessas informações ao público para
+                        estimular o interesse do cidadão brasileiro em sua função de fiscalizador do Estado. Remeter
+                        o poder que, do povo emana e ao povo deve servir, às suas vistas. Esperamos, de tal forma,
+                        despertar o senso crítico e a movimentação social a partir de nossa oferta.
+                        <br>
+                        O projeto foi idealizado na 3ª edição do Hackfest – Contra a Corrupção, uma Maratona
+                        Hacker de Programação, impulsionada pelo MPPB com o tema: tecnologia, transparência e
+                        cidadania, buscando o desenvolvimento de soluções tecnológicas que estimulem a
+                        participação da sociedade no combate à corrupção. E, os desenvolvedores são: Cassio S.
+                        Cabral, Jefferson Cunha, Victor Ximenis, Matteus S. L. Silva e Ithanyê H. A. Almeida.</p>
+                        <br>
+                        <p>Existem algumas plataformas que apresentam informações uteis sobre os parlamentares, como o perfil ideológico dos candidatos, as descrições de gastos públicos, suas relações políticas etc. mas de uma forma geral, as informações acabam se dispersando bastante e notamos a importância de uma concentração dessas informações para facilitar a sua popularização. Trouxemos a compilação de informações esparsas, como a frequência destes em Câmara, sua participação ativa através da apresentação de seus projetos e também de seus votos diante de propostas levantadas, o mapeamento dos gastos também será exposto em alcance de curiosidade adicional, além de uma base de instrução político-social para garantir que os dados ofertados sejam devidamente compreendidos e que tenham ciência do quê pode ser feito a partir deles.</p>
 
                     </article>
-
-
-
-                    <!-- four boxes  -->
-
-                    	<div class="row four-box-pan" role="four-box">
-
-
-
-                            <section class="col-xs-12 col-sm-6 col-md-3">
-
-                            	<figure><i class="fa fa-rocket" aria-hidden="true"></i></figure>
-
-                            	<h5>STARTUP FEATURE</h5>
-
-                                <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.</p>
-
-                            </section>
-
-                            <section class="col-xs-12 col-sm-6 col-md-3">
-
-                            	<figure><i class="fa fa-magic" aria-hidden="true"></i></figure>
-
-                            	<h5>Higly customizable</h5>
-
-                                <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.</p>
-
-                            </section>
-
-                            <section class="col-xs-12 col-sm-6 col-md-3">
-
-                            	<figure><i class="fa fa-paper-plane" aria-hidden="true"></i></figure>
-
-                            	<h5>Simplified workflow</h5>
-
-                                <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.</p>
-
-                            </section>
-
-                            <section class="col-xs-12 col-sm-6 col-md-3">
-
-                            	<figure><i class="fa fa-television" aria-hidden="true"></i></figure>
-
-                            	<h5>Cross platform</h5>
-
-                                <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.</p>
-
-                            </section>
-
-
-
-                        </div>
-
-                    <!-- four boxes -->
-
-
 
                 </div>
 
@@ -150,74 +105,6 @@
             <!-- section-two -->
 
             <section class="section-two" id="section-two">
-
-
-
-                <!-- image-content -->
-
-                <section>
-
-                	<div class="col-xs-12 col-sm-6 col-md-6">
-
-                    	<article>
-
-                        	<h2>Get Maxium benifites by working with our experts.</h2>
-
-                            <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.</p>
-
-                            <ul>
-
-                                <li>Maecenas sed diam eget risus varius </li>
-
-                                <li>orta felis euismod semper.Maecenas sed diam </li>
-
-                                <li>amet non magna. Morbi leo orta semper.</li>
-
-                                <li>Maecenas sed diam eget risus</li>
-
-                            </ul>
-
-                        </article>
-
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-
-                        <figure class="row" style="background-image:url('http://placehold.it/1600x800')"></figure>
-
-                    </div>
-
-                 </section>
-
-                <!-- image-content -->
-
-                <div class="clearfix"></div>
-
-                 <!-- image-content -->
-
-                 <section>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-
-                    	<figure class="row" style="background-image:url('http://placehold.it/1600x800')"></figure>
-
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-
-                    	<article>
-
-                    		<h2>We even give you more than your expectation</h2>
-
-                            <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.Maecenas sed diam eget risus varius blandit sit amet non magna. </p>
-
-                            <p>Morbi leo orta felis euismod semper.Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi leo orta felis euismod semper.Morbi leo orta felis euismod semper.Maecenas sed diam eget risus varius.</p>
-
-                        </article>
-
-                    </div>
-
-                 </section>
 
                 <!-- image-content -->
 
@@ -233,15 +120,15 @@
 
 
 
-                    <!-- 5.0 background container autoPlay:true,  -->
+                     <!-- 5.0 background container autoPlay:true,   -->
 
                     <div class="bg-container-youtube"></div>
 
-                	<header><a class="popup-vimeo video-button" href="https://vimeo.com/45830194"><i class="fa fa-caret-right" aria-hidden="true"></i></a>
+                	 <header><a class="popup-vimeo video-button" href="https://www.youtube.com/watch?v=0K-g84sK6R0"><i class="fa fa-caret-right" aria-hidden="true"></i></a>
 
                     <h4>Video Preview Of Product</h4>
 
-                    </header>
+                    </header> 
 
                 </div>
 
@@ -255,7 +142,7 @@
 
                 	<header role="title-page" class="text-center">
 
-                    	<h4>Customer Voice</h4>
+                    	<h2>Opinião</h2>
 
                     </header>
 
@@ -279,7 +166,7 @@
 
                                 <h5>Antony Casalena</h5>
 
-                                <h6>Vice president, IQTeam</h6>
+                                <h6>exemplo, IQTeam</h6>
 
                             </header>
 
@@ -297,13 +184,13 @@
 
                                 <h5>Brain Rice</h5>
 
-                                <h6>VP, Lexix Pvt Ltd</h6>
+                                <h6>outro exemplo, Lexix Pvt Ltd</h6>
 
                             </header>
 
                        	</section>
 
-                        <section class="item">
+                        <!-- <section class="item">
 
                             <article>
 
@@ -321,9 +208,9 @@
 
                             </header>
 
-                       	</section>
+                       	</section> -->
 
-                        <section class="item">
+                        <!-- <section class="item">
 
                             <article>
 
@@ -341,7 +228,7 @@
 
                             </header>
 
-                       	</section>
+                       	</section> -->
 
 
 
@@ -365,90 +252,7 @@
 
             <!-- section-three -->
 
-            <section class="section-three" id="section-three">
-
-            	<div class="container">
-
-                	<header role="title-page" class="text-center">
-
-                    	<h4>Flexible Plans</h4>
-
-                        <h2>Select the plan that suits you. Upgrade,<br/> downgrade, or cancel anytime.</h2>
-
-                    </header>
-
-                    <!-- pricing -->
-
-                    <div class="pricing">
-
-                    	<section>
-
-                        	<header><h4>Bronze</h4></header>
-
-                            <h2><span>$10</span> /mo</h2>
-
-                            <ul>
-
-                                <li>Free Shipping</li>
-
-                                <li>24/7 Support</li>
-
-                                <li>Single Licence</li>
-
-                            </ul>
-
-                            <input name="" type="button" value="get Strated">
-
-                        </section>
-
-                        <section>
-
-                        	<header><h4>Silver</h4></header>
-
-                            <h2><span>$20</span> /mo</h2>
-
-                            <ul>
-
-                                <li>Free Shipping</li>
-
-                                <li>24/7 Support</li>
-
-                                <li>Single Licence</li>
-
-                            </ul>
-
-                            <input name="" type="button" value="get Strated">
-
-                        </section>
-
-                        <section>
-
-                        	<header><h4>Gold</h4></header>
-
-                            <h2><span>$50</span> /mo</h2>
-
-                            <ul>
-
-                                <li>Free Shipping</li>
-
-                                <li>24/7 Support</li>
-
-                                <li>Single Licence</li>
-
-                            </ul>
-
-                            <input name="" type="button" value="get Strated">
-
-                        </section>
-
-                    </div>
-
-                    <!-- pricing -->
-
-                </div>
-
-            </section>
-
+            
             <!-- section-three -->
 
 
@@ -461,9 +265,7 @@
 
                     <header role="title-page" class="text-center">
 
-                        <h4>Meet The Team</h4>
-
-                        <h2>Our team is passionate about bringing the <br/>best for our customers.</h2>
+                        <h2>Nosso time</h2>
 
                     </header>
 
@@ -473,15 +275,14 @@
 
 
 
-                        <section class="col-xs-12 col-sm-6 col-md-3">
+                        <section class="col-xs-12 col-sm-6 col-md-4">
 
-                        	<figure><img src="http://placehold.it/249x263" alt="" class=" img-responsive"/></figure>
 
                         	<header>
 
-                            	<h5>Antony Casalena</h5>
+                            	<h5>Cassio S. Cabral</h5>
 
-								<h6>Vice president</h6>
+								<h6>Desenvolvedor</h6>
 
                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
@@ -499,15 +300,14 @@
 
                         </section>
 
-                        <section class="col-xs-12 col-sm-6 col-md-3">
+                        <section class="col-xs-12 col-sm-6 col-md-4">
 
-                        	<figure><img src="http://placehold.it/249x263" alt="" class=" img-responsive"/></figure>
 
                         	<header>
 
-                            	<h5>Anaia Doe</h5>
+                            	<h5>Ithanyê H. A. Almeida</h5>
 
-								<h6>Creative Head</h6>
+								<h6>...</h6>
 
                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
@@ -525,15 +325,14 @@
 
                         </section>
 
-                        <section class="col-xs-12 col-sm-6 col-md-3">
+                        <section class="col-xs-12 col-sm-6 col-md-4">
 
-                        	<figure><img src="http://placehold.it/249x263" alt="" class=" img-responsive"/></figure>
 
                         	<header>
 
-                            	<h5>Johnathan Doe</h5>
+                                <h5>Jefferson Cunha</h5>
 
-								<h6>Development Lead</h6>
+								<h6>Designer</h6>
 
                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
@@ -550,16 +349,39 @@
                             </header>
 
                         </section>
+                        
+                        <section class="col-xs-12 col-sm-6 col-md-4">
 
-                        <section class="col-xs-12 col-sm-6 col-md-3">
+                        
+                        	<header>
 
-                        	<figure><img src="http://placehold.it/249x263" alt="" class=" img-responsive"/></figure>
+                            	<h5>Matteus S. L. Silva</h5>
+
+								<h6>Desenvolvedor</h6>
+
+                                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+                                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+
+                                <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+                                <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+
+                                <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+
+                                <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+
+                            </header>
+
+                        </section>
+                        <section class="col-xs-12 col-sm-6 col-md-4">
+
 
                         	<header>
 
-                            	<h5>Julian Gulia</h5>
+                            	<h5>Victor Ximenis</h5>
 
-								<h6>Marketing Head</h6>
+								<h6>Desenvolvedor</h6>
 
                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
@@ -593,21 +415,19 @@
 
             <!-- section-five -->
 
-            <section class="section-five" id="section-five">
+            <!-- <section class="section-five" id="section-five">
 
             	<div class="container">
 
                 	 <header role="title-page" class="text-center">
 
-                        <h4>Newsletter Subscribe</h4>
+                        <h2>Se inscreva para receber nossas novidades</h2>
 
-                        <h2>Subscribe to get monthly products updates<br/>and exclusive offers</h2>
-
-                    </header>
+                    </header> -->
 
                     <!-- subscribe -->
 
-                    <div class="subscribe-form">
+                    <!-- <div class="subscribe-form">
 
                         <div class="ntify_form">
 
@@ -621,23 +441,23 @@
 
                                 Subscribe <i class="fa fa-envelope" aria-hidden="true"></i></button>
 
-                            </form>
+                            </form> -->
 
                             <!-- subscribe message -->
 
-                            <div id="mesaj"></div>
+                            <!-- <div id="mesaj"></div> -->
 
                             <!-- subscribe message -->
 
-                        </div>
+                        <!-- </div>
 
-                    </div>
+                    </div> -->
 
                     <!-- subscribe -->
 
-                </div>
+                <!-- </div>
 
-            </section>
+            </section> -->
 
             <!-- section-five -->
 
@@ -653,15 +473,9 @@
 
                         <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
-                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        <a href="https://www.facebook.com/ospoliticoscom/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
 
-                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-
-                        <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-
-                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-
-                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/os.politicos/"><i class="fa fa-instagram" aria-hidden="true"></i></a>
 
                     </section>
 
@@ -669,17 +483,11 @@
 
                     <!-- nav -->
 
-                    <nav role="footer-nav">
-
-                        <a href="#">Terms of Use </a>
-
-                        <a href="#">Privacy Policy</a>
-
-                    </nav>
+                    <nav role="footer-nav"></nav>
 
                     <!-- nav -->
 
-                    <p class="copy">&copy; 2016 Sartr. All rights reserved. Made with <i class="fa fa-heart pulse"></i> by <a href="http://www.designstub.com/">Designstub</a></p>
+                    <p class="copy">&copy; 2017-2018 OsPolíticos.com. Todos os direitos reservados. Feito com <i class="fa fa-heart pulse"></i> pelos <a href="http://www.designstub.com/">OsPolíticos.com</a></p>
 
                 </div>
 

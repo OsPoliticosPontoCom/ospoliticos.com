@@ -36,17 +36,15 @@
           </div>
         </div>
         <div class="col-md-3 right top-space full-height">
-          <h3>Gastos</h3>
+          <h3>Gastos em 2017</h3>
+          <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
+
+          <br>
           <label class="label">Transporte</label>
           <el-progress :text-inside="true" :stroke-width="18" :percentage="35" status="success"></el-progress> <br>
 
           <label class="label">Outros</label>
           <el-progress :text-inside="true" :stroke-width="18" :percentage="65" status="success"></el-progress> <br>
-          <hr>
-
-          <h3>Gastos Totais em 2017</h3>
-          {{new numeral(gastosTotais).format(FORMATO)}}
-
           <hr>
 
           <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>

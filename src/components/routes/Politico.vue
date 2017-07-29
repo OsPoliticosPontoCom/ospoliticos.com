@@ -16,6 +16,9 @@
             <strong>Partido:</strong> {{siglaPartido}}  <br>
             <strong>Uf:</strong> {{siglaUf}}  <br>
             <hr>
+            <router-link :to="{ name: 'politico', params: { id }}">
+              <button class="btn btn-default btn-xs">Ver Perfil</button>
+            </router-link>
           </div>
         </div>
       </div>

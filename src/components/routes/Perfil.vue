@@ -5,29 +5,47 @@
         <div class="col-md-3 left text-left top-space full-height">
           <div class="profile-photo">
             <img class="img-responsive" v-if="politico.ultimoStatus" :src="politico.ultimoStatus.urlFoto" alt="">
-            Nome: {{politico.ultimoStatus.nome}} <br>
-            Partido: {{politico.ultimoStatus.siglaPartido}} <br>
-            Redes Sociais: {{politico.redeSocial}} <br>
-            Município de nascimento: {{politico.municipioNascimento}}
+          </div>
+          <div class="profile-info">
+            <p>Nome: {{politico.ultimoStatus.nome}}</p>
+            <p>Partido: {{politico.ultimoStatus.siglaPartido}}</p>
+            <p>Redes Sociais: {{politico.redeSocial}}</p>
+            <p>Naturalidade: {{politico.municipioNascimento}}</p>
           </div>
         </div>
-        <div class="col-md-6 middle top-space full-height">
+        <div class="col-md-5 middle top-space full-height">
           <el-card class="box-card">
-            <p>
-              O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisOutro).format(FORMATO)}}
-            </p>
-            <button class="btn btn-primary pull-right">
-              Compartilhar no Twitter
-            </button>
+            <div class="row">
+              <div class="col-md-12">
+                <p>
+                  O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisOutro).format(FORMATO)}}
+                </p>
+              </div>
+            </div>
+            <div class="row share-section">
+              <div class="col-md-12">
+                <button class="btn btn-primary pull-right">
+                  Compartilhar no Twitter
+                </button>
+              </div>
+            </div>
           </el-card>
 
           <el-card class="box-card" v-for="comparacao in comparacoes">
-            <p>
-              {{comparacao}}
-            </p>
-            <button class="btn btn-primary pull-right">
-              Compartilhar no Twitter
-            </button>
+            <div class="row">
+              <div class="col-md-12">
+                <p>
+                  {{comparacao}}
+                </p>
+              </div>
+            </div>
+            <div class="row share-section">
+              <div class="col-md-12">
+                <button class="btn btn-primary pull-right">
+                  Compartilhar no Twitter
+                </button>
+              </div>
+            </div>
           </el-card>
 
           <!-- ultimos tweets do deputado(se existir em deputado.redeSocial) -->
@@ -35,7 +53,7 @@
 
           </div>
         </div>
-        <div class="col-md-3 right top-space full-height">
+        <div class="col-md-4 right top-space full-height">
           <h3>Gastos em 2017</h3>
           <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
 
@@ -282,18 +300,25 @@ export default {
   height: 100%;
 }
 
+.share-section {
+  margin-top: 15px;
+}
+
 .perfil {
-  margin-top: 54px;
-  background-color: #3c3636;
-  color: white;
+  margin-top: 70px;
+  color: #4c4c4c;
+}
+
+.profile-info {
+  margin-top: 15px;
 }
 
 .left {
-  border-right: 1px solid black;
+  border-right: 1px solid #ccc;
 }
 
 .right {
-  border-left: 1px solid black;
+  border-left: 1px solid #ccc;
 }
 
 .top-space {

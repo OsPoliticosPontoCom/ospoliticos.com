@@ -14,13 +14,26 @@
                 <option :value="estado.sigla" v-for="estado in estados" :key="estado.id">{{estado.nome}}</option>
               </select>
             </div>
-            <!-- <div class="col-md-3">
+            <div class="col-md-2">
               <label>Partido</label>
-              <select class="select-estado" v-model="partido">
+              <select class="select-partido" v-model="partido">
                 <option disabled value="">Partido</option>
+                <option value="TODOS">Todos</option>
                 <option :value="partido.sigla" v-for="partido in partidos" :key="partido.id">{{partido.sigla}}</option>
               </select>
-            </div> -->
+            </div>
+            <div class="col-md-2">
+              <label>Sexo</label>
+              <select class="select-sexo" v-model="sexo">
+                <option disabled value="">Sexo</option>
+                <option value="TODOS">Todos</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <input class="form-control input-nome" placeholder="Nome" />
+            </div>
           </div>
         </div>
       </div>
@@ -59,11 +72,14 @@ import Politico from './Politico.vue'
 // PODE SER UTIL https://github.com/coderdiaz/vue-datasource
 import InfiniteLoading from 'vue-infinite-loading'
 
-// async function getDeputadosFromPartido (partido, fetch) {
-//   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaPartido=${partido}&itens=99&ordem=ASC&ordenarPor=nome`)
-//   const result = await deputados.json()
-//   return result.dados
-// }
+async function getDeputados (partido, uf, sexo, fetch) {
+  var newPartido = (partido !== null && partido !== 'TODOS') ? partido : ''
+  var newSexo = (sexo !== null && sexo !== 'TODOS') ? sexo : ''
+
+  const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&siglaPartido=${newPartido}&siglaSexo=${newSexo}&itens=99&ordem=ASC&ordenarPor=nome`)
+  const result = await deputados.json()
+  return result.dados
+}
 
 async function getDeputadosFromUF (uf, fetch) {
   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=99&ordem=ASC&ordenarPor=nome`)
@@ -89,13 +105,11 @@ export default {
 
       // estados(UFs)
       const estados = await vm.$fetch.get('https://dadosabertos.camara.leg.br/api/v2/referencias/uf')
-      console.log('estados', estados)
       const resultEstados = await estados.json()
       vm.estados = resultEstados.dados
 
       // partidos
       const partidos = await vm.$fetch.get('https://dadosabertos.camara.leg.br/api/v2/partidos?itens=100&ordem=ASC&ordenarPor=sigla')
-      console.log('partidos', partidos)
       const resultPartidos = await partidos.json()
       vm.partidos = resultPartidos.dados
 
@@ -110,7 +124,10 @@ export default {
       politicos: [],
       proposicoes: [],
       estado: 'PB',
-      estados: ['PB', 'PE', 'SP', 'RJ'] // valores serao substituidos pelos que vem da API UFs, PB, PE, SP...
+      estados: ['PB', 'PE', 'SP', 'RJ'], // valores serao substituidos pelos que vem da API UFs, PB, PE, SP...
+      partido: 'TODOS',
+      partidos: ['TODOS', 'DEM', 'PCdoB', 'PDT', 'PEN'], // valores serao substituidos pelos que vem da API Partidos, DEM, PCdoB, PDT, PEN...
+      sexo: 'TODOS'
     }
   },
   methods: {
@@ -129,8 +146,16 @@ export default {
   },
   watch: {
     async estado (newEstado) {
-      this.politicos = await getDeputadosFromUF(newEstado, this.$fetch)
+      this.politicos = await getDeputados(this.partido, newEstado, this.sexo, this.$fetch)
       this.proposicoes = await getDeputadosProposicoesFromUF(newEstado, this.$fetch)
+    },
+    async partido (newPartido) {
+      this.politicos = await getDeputados(newPartido, this.estado, this.sexo, this.$fetch)
+      this.proposicoes = await getDeputadosProposicoesFromUF(this.estado, this.$fetch)
+    },
+    async sexo (newSexo) {
+      this.politicos = await getDeputados(this.partido, this.estado, newSexo, this.$fetch)
+      this.proposicoes = await getDeputadosProposicoesFromUF(this.estado, this.$fetch)
     }
   },
   components: {

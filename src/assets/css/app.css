@@ -3,6 +3,17 @@
   margin: 80px 0 30px 0;
 }
 
+.politicos-filtro label,
+.politicos-filtro select,
+.politicos-filtro input {
+  display: -webkit-inline-box;
+}
+
+.input-nome {
+  max-width: 230px;
+  margin-top: -5px;
+}
+
 .gasto-por-dispesa > .label {
   color: #4c4c4c;
 }

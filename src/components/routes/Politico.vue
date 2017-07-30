@@ -20,7 +20,9 @@
             </slot>
             <slot name="link">
               <router-link :to="{ name: 'politico', params: { id }}">
-                <button class="btn btn-default btn-xs">Ver Perfil</button>
+                <button class="btn btn-default btn-xs">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>&nbsp;Ver Perfil
+                </button>
               </router-link>
             </slot>
           </div>

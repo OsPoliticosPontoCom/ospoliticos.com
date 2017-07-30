@@ -424,11 +424,11 @@ export default {
 }
 
 .left {
-  border-right: 1px solid #ccc;
+  border-right: 2px solid #ccc;
 }
 
 .right {
-  border-left: 1px solid #ccc;
+  border-left: 2px solid #ccc;
 }
 
 .top-space {

@@ -6,10 +6,9 @@
           <div class="profile-photo">
             <img class="img-responsive" v-if="politico.ultimoStatus" :src="politico.ultimoStatus.urlFoto" alt="">
           </div>
-          <div class="profile-info">
+          <div class="profile-info" v-if="politico && politico.ultimoStatus">
             <p>Nome: {{politico.ultimoStatus.nome}}</p>
             <p>Partido: {{politico.ultimoStatus.siglaPartido}}</p>
-            <p v-if="politico.redeSocial.length > 0">Redes Sociais: {{politico.redeSocial}}</p>
             <p>Naturalidade: {{politico.municipioNascimento}}</p>
           </div>
           <hr>
@@ -19,22 +18,23 @@
             <div class="row">
               <politico class="col-md-12" v-for="politico in deputadosDoMesmoUF" :key="politico.id" :politico="politico">
                 <button class="btn btn-default btn-xs" @click.stop="comparaDeputado(politico)">Comparar</button>
+                <button slot="link" class="btn btn-default btn-xs" @click.stop="verPerfil(politico)">Ver Perfil</button>
               </politico>
             </div>
           </div>
         </div>
         <div class="col-md-5 middle top-space full-height">
-          <el-card class="box-card">
+          <el-card class="box-card" v-if="gastosTotaisAnoAnterior > 0">
             <div class="row">
               <div class="col-md-12">
-                <p>
-                  O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisAnoAnterior).format(FORMATO)}}
+                <p v-if="politico && politico.ultimoStatus">
+                  O político {{normalizeText(politico.ultimoStatus.nome)}} gastou em {{anoAnterior}}: {{new numeral(gastosTotaisAnoAnterior).format(FORMATO)}}
                 </p>
               </div>
             </div>
             <div class="row share-section">
               <div class="col-md-12">
-                <a :href="`https://twitter.com/intent/tweet?text=O deputado ${politico.ultimoStatus.nome} gastou em 2016: ${new numeral(gastosTotaisAnoAnterior).format(FORMATO)}&via=os_politicos`" target="_blank">
+                <a v-if="politico && politico.ultimoStatus" :href="`https://twitter.com/intent/tweet?text=O político ${normalizeText(politico.ultimoStatus.nome)} gastou em ${anoAnterior}: ${new numeral(gastosTotaisAnoAnterior).format(FORMATO)}&via=os_politicos`" target="_blank">
                   <button class="btn btn-primary pull-right">
                     <i class="fa fa-twitter-square"></i> Compartilhar no Twitter
                   </button>
@@ -63,6 +63,7 @@
           </el-card>
 
           <!-- ultimos tweets do deputado(se existir em deputado.redeSocial) -->
+          <h3 v-show="lastTweets.length > 0">Últimos Tweets</h3>
           <div ref="last-tweets" class="last-tweets" v-html="lastTweets">
 
           </div>
@@ -71,7 +72,7 @@
 
           <div class="row gastos">
             <div class="col-md-12">
-              <h3>Gastos em 2017</h3>
+              <h3>Gastos em {{anoAtual}}</h3>
               <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
 
               <br>
@@ -88,7 +89,7 @@
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
               <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="false" :stroke-width="18"
               type="circle"
-              :percentage="porcentagemEmRelacaoAoAnoAnterior"></el-progress>
+              :percentage="Number(porcentagemEmRelacaoAoAnoAnterior)"></el-progress>
               <hr>
             </div>
           </div>
@@ -97,7 +98,7 @@
             <div class="col-md-12">
               <div class="fornecedores">
                 <table class="table">
-                  <caption>Maiores gastos em 2017 por Fornecedores</caption>
+                  <caption>Maiores gastos em {{anoAtual}} por Fornecedores</caption>
                   <thead>
                     <tr>
                       <th>Fornecedor</th>
@@ -202,7 +203,7 @@ function comparaQuemGastouMais (deputadoA, gastoTotalA, deputadoB, gastoTotalB, 
   let maior = gastoTotalA > gastoTotalB ? a : b
   let menor = gastoTotalA <= gastoTotalB ? a : b
 
-  return `O deputado ${maior.nome} do ${maior.partido} gastou ${Number((1 - (menor.gasto / maior.gasto)) * 100).toFixed(2)}% (${numeral(maior.gasto - menor.gasto).format(FORMATO)}) a mais do que o deputado ${menor.nome} do ${menor.partido} em ${ano}`
+  return `O político ${normalizeText(maior.nome)} do ${maior.partido} gastou ${Number((1 - (menor.gasto / maior.gasto)) * 100).toFixed(2)}% (${numeral(maior.gasto - menor.gasto).format(FORMATO)}) a mais do que o político ${normalizeText(menor.nome)} do ${menor.partido} em ${ano}`
 }
 // alternativa ao de cima
 function comparaQuemGastouMenos (deputadoA, gastoTotalA, deputadoB, gastoTotalB, ano = 2017) {
@@ -211,7 +212,7 @@ function comparaQuemGastouMenos (deputadoA, gastoTotalA, deputadoB, gastoTotalB,
   let maior = gastoTotalA > gastoTotalB ? a : b
   let menor = gastoTotalA <= gastoTotalB ? a : b
 
-  return `O deputado ${menor.nome} do ${menor.partido} gastou ${numeral(maior.gasto - menor.gasto).format(FORMATO)} a menos do que o deputado ${maior.nome} do ${maior.partido} em ${ano} até o momento`
+  return `O político ${normalizeText(menor.nome)} do ${menor.partido} gastou ${numeral(maior.gasto - menor.gasto).format(FORMATO)} a menos do que o político ${normalizeText(maior.nome)} do ${maior.partido} em ${ano} até o momento`
 }
 
 export default {
@@ -219,20 +220,30 @@ export default {
   beforeRouteEnter (to, from, next) {
     console.log('to', to)
     next(async vm => {
+      // setup
       function handleTweets (tweets) {
         console.log('tweets', tweets)
         vm.lastTweets = tweets.map(tweet => {
           return `
-          <div class="tweet">
+          <div class="tweet-wrapper el-card">
             ${tweet}
           </div>
           `
         }).join('')
       }
 
+      let hoje = new Date()
+      let anoAtual = hoje.getFullYear()
+      let anoAnterior = anoAtual - 1
+      vm.anoAtual = anoAtual
+      vm.anoAnterior = anoAnterior
+
+      let basePath = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'
+      vm.basePath = basePath
+      // -------------------
+
       const {id} = to.params
-      // TODO get basePath for API
-      let deputado = await vm.$fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados/${id}`)
+      let deputado = await vm.$fetch.get(`${basePath}${id}`)
       const result = await deputado.json()
       deputado = result.dados
       vm.politico = deputado
@@ -240,32 +251,37 @@ export default {
       // -- fetch twitters
       if (vm.politico.redeSocial && vm.politico.redeSocial.length > 0) {
         // TODO check if twitter
-        const twitterScreenName = vm.politico.redeSocial[0].split('/').slice(-1)[0] // get last string, the screen_name
+        for (let i = 0; i < vm.politico.redeSocial.length; i++) {
+          let redeSocial = vm.politico.redeSocial[i]
+          if (redeSocial.includes('twitter')) {
+            const twitterScreenName = redeSocial.split('/').slice(-1)[0] // get last string, the screen_name
 
-        // FROM http://www.jasonmayes.com/projects/twitterApi/#sthash.b7Ds9SC7.b9H8Ox9e.dpbs
-        // https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/js/exampleUsage.js
-        require('assets/js/twitterFetcher_min.js')
+            // FROM http://www.jasonmayes.com/projects/twitterApi/#sthash.b7Ds9SC7.b9H8Ox9e.dpbs
+            // https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/js/exampleUsage.js
+            require('assets/js/twitterFetcher_min.js')
 
-        const configProfile = {
-          'profile': {'screenName': twitterScreenName},
-          'maxTweets': 5,
-          'enableLinks': true,
-          'showUser': true,
-          'showTime': true,
-          'showImages': true,
-          'lang': 'pt',
-          'customCallback': handleTweets
+            const configProfile = {
+              'profile': {'screenName': twitterScreenName},
+              'maxTweets': 5,
+              'enableLinks': true,
+              'showUser': true,
+              'showTime': true,
+              'showImages': true,
+              'lang': 'pt',
+              'customCallback': handleTweets
+            }
+            window.twitterFetcher.fetch(configProfile)
+          }
         }
-        window.twitterFetcher.fetch(configProfile)
       }
 
-      // --- despesas do ano (2017)
-      const gastosPorFornecedores = await despesasDeputadoPorAno(id, DB, vm.$fetch, '2017')
+      // --- despesas do ano atual
+      const gastosPorFornecedores = await despesasDeputadoPorAno(id, DB, vm.$fetch, anoAtual)
       vm.gastosPorFornecedores = gastosPorFornecedores
       vm.gastosTotais = vm.gastosPorFornecedores.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
-      // --- despesas do ano (2016)
-      let gastosAnoAnterior = await despesasDeputadoPorAno(id, DB, vm.$fetch, '2016')
+      // --- despesas do ano anterior
+      let gastosAnoAnterior = await despesasDeputadoPorAno(id, DB, vm.$fetch, anoAnterior)
       vm.gastosAnoAnterior = gastosAnoAnterior
       vm.gastosTotaisAnoAnterior = gastosAnoAnterior.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
 
@@ -280,27 +296,28 @@ export default {
       let deputadosDoMesmoUF = await getDeputadosFromUF(deputado.ufNascimento, vm.$fetch)
       // n considera o deputado atual
       vm.deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== deputado.id)
-
+      console.log('vm.deputadosDoMesmoUF', vm.deputadosDoMesmoUF)
       const outrosDeputados = sampleSize(deputadosDoMesmoUF, 2)
       vm.outrosPoliticos = [...outrosDeputados]
-      vm.politicoOutro = outrosDeputados[0]
-      vm.politicoOutro2 = outrosDeputados[1]
 
-      // --- despesas do ano (2017) para outros politicos
+      // --- despesas do ano atual para outros politicos
       for (let politico of vm.outrosPoliticos) {
-        const gastosPolitico = await despesasDeputadoPorAno(politico.id, DB, vm.$fetch, '2017')
+        const gastosPolitico = await despesasDeputadoPorAno(politico.id, DB, vm.$fetch, anoAtual)
         const gastosTotaisPolitico = gastosPolitico.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
         politico.gastos = gastosPolitico
         politico.gastosTotais = gastosTotaisPolitico
       }
 
-      // TODO compara numa funcao, dado o menor e maior
+      // comparacoes
       const comp1 = comparaQuemGastouMais(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
       const comp2 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[1], vm.outrosPoliticos[1].gastosTotais)
       const comp3 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
 
-      vm.comparacoes = [comp1, comp2, comp3]
-      // set timeout
+      const maiorGastoAnoAnterior = vm.gastosAnoAnterior[0]
+      // maior gasto do ano anterior
+      const comp4 = `O maior gasto em ${anoAnterior} do político ${normalizeText(deputado.ultimoStatus.nome)} foi de ${new numeral(maiorGastoAnoAnterior.totalValorLiquido).format(FORMATO)} em ${normalizeText(maiorGastoAnoAnterior.nomeFornecedor)}` // eslint-disable-line
+
+      vm.comparacoes = [comp4, comp1, comp2, comp3]
     })
   },
   mounted () {
@@ -342,26 +359,34 @@ export default {
       gastosAnoAnterior: [],
       gastosTotais: 0,
       gastosTotaisAnoAnterior: 0,
+      normalizeText,
       numeral,
       FORMATO,
       searchDeputado: '',
       deputadosDoMesmoUF: [],
       comparacoes: [],
-      outrosPoliticos: [] // para comparar
+      outrosPoliticos: [], // para comparar
+      anoAnterior: 2016, // atualizado em beforeRouteEnter
+      anoAtual: 2017 // atualizado em beforeRouteEnter
     }
   },
   methods: {
+    verPerfil (deputado) {
+      let id = deputado.id
+      this.$router.push({ name: 'politico', params: { id } })
+      window.location.reload()
+    },
     async comparaDeputado (deputado) {
       try {
         let politico = deputado
-        const gastosPolitico = await despesasDeputadoPorAno(deputado.id, DB, this.$fetch, '2017')
+        const gastosPolitico = await despesasDeputadoPorAno(deputado.id, DB, this.$fetch, this.anoAtual)
         const gastosTotaisPolitico = gastosPolitico.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
         politico.gastos = gastosPolitico
         politico.gastosTotais = gastosTotaisPolitico
 
         const comp1 = comparaQuemGastouMais(this.politico, this.gastosTotais, politico, politico.gastosTotais)
         const comp2 = comparaQuemGastouMenos(this.politico, this.gastosTotais, politico, politico.gastosTotais)
-
+        this.outrosPoliticos.push(politico)
         this.comparacoes.push(comp1, comp2)
       } catch (e) {
         Notification.error({
@@ -448,17 +473,17 @@ export default {
   color: black;
 }
 .last-tweets {
-  .tweet {
-    border: 1px solid white;
+  .tweet-wrapper {
     margin-bottom: 10px;
     position: relative;
-    height: 116px;
-    color: white;
+    height: 155px;
+    padding: 20px;
     .user {
       width: 15%;
       position: absolute;
       left: 0;
       display: block;
+      padding-left: 20px;
     }
     .tweet {
       width: 85%;
@@ -468,12 +493,12 @@ export default {
     }
     .interact {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: 6px;
+      right: 6px;
       display: block;
       a {
-        margin-right: 6px;
-        color: white;
+        padding: 6px;
+        color: #333;
       }
     }
     .timePosted {

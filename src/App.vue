@@ -60,6 +60,10 @@
                                     </li>
 
                                     <li>
+                                      <a href="http://www2.camara.leg.br/glossario" target="_blank">Dicionário</a>
+                                    </li>
+
+                                    <li>
                                       <a href="#section-two" title="Features">Features
                                       </a>
                                     </li>

@@ -65,22 +65,7 @@
                                     </li>
 
                                     <li>
-                                      <a href="#section-three" title="Pricing">Pricing
-                                      </a>
-                                    </li>
-
-                                    <li>
-                                      <a href="#section-four" title="Team">Team
-                                      </a>
-                                    </li>
-
-                                    <li>
-                                      <a href="#section-five" title="Contact">Contact
-                                      </a>
-                                    </li>
-
-                                    <li>
-                                      <a href="#section-six" title="Join Us">Join Us
+                                      <a href="#section-four" title="Team">Time
                                       </a>
                                     </li>
 

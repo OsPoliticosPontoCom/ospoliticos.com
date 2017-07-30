@@ -9,7 +9,7 @@
         <div class="row">
           <div class="col-md-6" v-if="id">
             <router-link :to="{ name: 'politico', params: { id }}">
-              <img :src="urlFoto" :alt="nome">
+              <img class="politico-img" :src="urlFoto" :alt="nome">
             </router-link>
           </div>
           <div class="col-md-6 text-left">

@@ -10,10 +10,17 @@
 }
 
 .input-nome {
-  max-width: 230px;
   margin-top: -5px;
 }
 
 .gasto-por-dispesa > .label {
   color: #4c4c4c;
+}
+
+.proposicao {
+  text-align: left;
+}
+
+.politico-img {
+  max-width: 100%;
 }

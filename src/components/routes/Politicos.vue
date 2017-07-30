@@ -31,7 +31,7 @@
                 <option value="F">Feminino</option>
               </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
               <input class="form-control input-nome" placeholder="Nome" />
             </div>
           </div>
@@ -42,12 +42,12 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-10" >
+      <div class="col-md-9" >
         <politico class="col-md-4" v-for="politico in politicos" :key="politico.id" :politico="politico">
         </politico>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-3">
         <h3>Últimas proposições dos deputados da(o) {{estado}}</h3>
         <hr>
         <div class="proposicao" v-for="proposicao in proposicoes" :key="proposicao.id">

@@ -1,5 +1,5 @@
 <template>
-<div class="politico col-md-4">
+<div class="politico">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">{{startCase(toLower(nome))}}</h3>
@@ -14,11 +14,15 @@
           </div>
           <div class="col-md-6 text-left">
             <strong>Partido:</strong> {{siglaPartido}}  <br>
-            <strong>Uf:</strong> {{siglaUf}}  <br>
+            <strong>UF:</strong> {{siglaUf}}  <br>
             <hr>
-            <router-link :to="{ name: 'politico', params: { id }}">
-              <button class="btn btn-default btn-xs">Ver Perfil</button>
-            </router-link>
+            <slot >
+            </slot>
+            <slot name="link">
+              <router-link :to="{ name: 'politico', params: { id }}">
+                <button class="btn btn-default btn-xs">Ver Perfil</button>
+              </router-link>
+            </slot>
           </div>
         </div>
       </div>

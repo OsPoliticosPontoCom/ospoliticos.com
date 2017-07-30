@@ -30,7 +30,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-10" >
-        <politico v-for="politico in politicos" :key="politico.id" :politico="politico">
+        <politico class="col-md-4" v-for="politico in politicos" :key="politico.id" :politico="politico">
         </politico>
       </div>
 
@@ -110,7 +110,7 @@ export default {
       politicos: [],
       proposicoes: [],
       estado: 'PB',
-      estados: ['PB', 'PE', 'SP', 'RJ'] // vem da API UFs, PB, PE, SP...
+      estados: ['PB', 'PE', 'SP', 'RJ'] // valores serao substituidos pelos que vem da API UFs, PB, PE, SP...
     }
   },
   methods: {

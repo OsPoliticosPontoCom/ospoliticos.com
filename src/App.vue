@@ -20,7 +20,7 @@
                         <div class="col-xs-5 col-sm-2 col-md-2 col-lg-2">
 
                             <h1 class="gravata-wrapper">
-                                <a href="#headere-top" title="OsPoliticos.com"><img src="~assets/img/icon_gravata.png" alt="Os politicos ponto com gravata" title="OsPoliticos.com"/></a>
+                                <a href="/" title="OsPoliticos.com"><img src="~assets/img/icon_gravata.png" alt="Os politicos ponto com gravata" title="OsPoliticos.com"/></a>
                             </h1>
 
                         </div>

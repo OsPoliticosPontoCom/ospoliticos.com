@@ -9,8 +9,18 @@
           <div class="profile-info">
             <p>Nome: {{politico.ultimoStatus.nome}}</p>
             <p>Partido: {{politico.ultimoStatus.siglaPartido}}</p>
-            <p>Redes Sociais: {{politico.redeSocial}}</p>
+            <p v-if="politico.redeSocial.length > 0">Redes Sociais: {{politico.redeSocial}}</p>
             <p>Naturalidade: {{politico.municipioNascimento}}</p>
+          </div>
+          <hr>
+          <div class="outros-politicos">
+            <h3>Compare com outros Deputados</h3>
+            <br>
+            <div class="row">
+              <politico class="col-md-12" v-for="politico in deputadosDoMesmoUF" :key="politico.id" :politico="politico">
+                <button class="btn btn-default btn-xs" @click.stop="comparaDeputado(politico)">Comparar</button>
+              </politico>
+            </div>
           </div>
         </div>
         <div class="col-md-5 middle top-space full-height">
@@ -24,14 +34,16 @@
             </div>
             <div class="row share-section">
               <div class="col-md-12">
-                <button class="btn btn-primary pull-right">
-                  Compartilhar no Twitter
-                </button>
+                <a :href="`https://twitter.com/intent/tweet?text=O deputado ${politico.ultimoStatus.nome} gastou em 2016: ${new numeral(gastosTotaisAnoAnterior).format(FORMATO)}&via=os_politicos`" target="_blank">
+                  <button class="btn btn-primary pull-right">
+                    <i class="fa fa-twitter-square"></i> Compartilhar no Twitter
+                  </button>
+                </a>
               </div>
             </div>
           </el-card>
 
-          <el-card class="box-card" v-for="comparacao in comparacoes">
+          <el-card class="box-card" v-for="(comparacao, index) in comparacoes" :key="index">
             <div class="row">
               <div class="col-md-12">
                 <p>
@@ -41,9 +53,11 @@
             </div>
             <div class="row share-section">
               <div class="col-md-12">
-                <button class="btn btn-primary pull-right">
-                  Compartilhar no Twitter
-                </button>
+                <a :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(comparacao)}&via=os_politicos`" target="_blank">
+                  <button class="btn btn-primary pull-right">
+                    <i class="fa fa-twitter-square"></i> Compartilhar no Twitter
+                  </button>
+                </a>
               </div>
             </div>
           </el-card>
@@ -72,7 +86,9 @@
           <div class="row gastos gastos-anterior">
             <div class="col-md-12">
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-              <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="true" :stroke-width="18" :percentage="Number((gastosTotais/gastosTotaisAnoAnterior) * 100).toFixed(2)" status="success"></el-progress>
+              <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="false" :stroke-width="18"
+              type="circle"
+              :percentage="porcentagemEmRelacaoAoAnoAnterior"></el-progress>
               <hr>
             </div>
           </div>
@@ -155,6 +171,9 @@
 
 import {despesasDeputadoPorAno, getDeputadosFromUF, normalizeText} from 'assets/js/helpers'
 import {sampleSize, groupBy} from 'lodash'
+import Politico from './Politico.vue'
+import { Notification } from 'element-ui'
+
 const numeral = require('numeral')
 const FORMATO = '$ 0,0.00'
 const LocalStorageDB = require('localStorageDB')
@@ -175,6 +194,24 @@ if (DB.isNew()) {
     'tipoDocumento'
   ])
   DB.commit()
+}
+// funcoes para comparacao
+function comparaQuemGastouMais (deputadoA, gastoTotalA, deputadoB, gastoTotalB, ano = 2017) {
+  let a = {nome: deputadoA.nome || deputadoA.ultimoStatus.nome, gasto: gastoTotalA, partido: deputadoA.siglaPartido || deputadoA.ultimoStatus.siglaPartido}
+  let b = {nome: deputadoB.nome, gasto: gastoTotalB, partido: deputadoB.siglaPartido}
+  let maior = gastoTotalA > gastoTotalB ? a : b
+  let menor = gastoTotalA <= gastoTotalB ? a : b
+
+  return `O deputado ${maior.nome} do ${maior.partido} gastou ${Number((1 - (menor.gasto / maior.gasto)) * 100).toFixed(2)}% (${numeral(maior.gasto - menor.gasto).format(FORMATO)}) a mais do que o deputado ${menor.nome} do ${menor.partido} em ${ano}`
+}
+// alternativa ao de cima
+function comparaQuemGastouMenos (deputadoA, gastoTotalA, deputadoB, gastoTotalB, ano = 2017) {
+  let a = {nome: deputadoA.nome || deputadoA.ultimoStatus.nome, gasto: gastoTotalA, partido: deputadoA.siglaPartido || deputadoA.ultimoStatus.siglaPartido}
+  let b = {nome: deputadoB.nome, gasto: gastoTotalB, partido: deputadoB.siglaPartido}
+  let maior = gastoTotalA > gastoTotalB ? a : b
+  let menor = gastoTotalA <= gastoTotalB ? a : b
+
+  return `O deputado ${menor.nome} do ${menor.partido} gastou ${numeral(maior.gasto - menor.gasto).format(FORMATO)} a menos do que o deputado ${maior.nome} do ${maior.partido} em ${ano} até o momento`
 }
 
 export default {
@@ -242,40 +279,53 @@ export default {
       // -- coleta outros deputados para comparar
       let deputadosDoMesmoUF = await getDeputadosFromUF(deputado.ufNascimento, vm.$fetch)
       // n considera o deputado atual
-      deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== id)
+      vm.deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== deputado.id)
+
       const outrosDeputados = sampleSize(deputadosDoMesmoUF, 2)
+      vm.outrosPoliticos = [...outrosDeputados]
       vm.politicoOutro = outrosDeputados[0]
       vm.politicoOutro2 = outrosDeputados[1]
 
-      // --- despesas do ano (2017) para politicoOutro
-      let gastosPorFornecedoresPolitico2 = await despesasDeputadoPorAno(vm.politicoOutro.id, DB, vm.$fetch, '2017')
-      let gastosTotaisPolitico2 = gastosPorFornecedoresPolitico2.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+      // --- despesas do ano (2017) para outros politicos
+      for (let politico of vm.outrosPoliticos) {
+        const gastosPolitico = await despesasDeputadoPorAno(politico.id, DB, vm.$fetch, '2017')
+        const gastosTotaisPolitico = gastosPolitico.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+        politico.gastos = gastosPolitico
+        politico.gastosTotais = gastosTotaisPolitico
+      }
 
-      const comp1 = `O deputado ${deputado.ultimoStatus.nomeEleitoral} do ${deputado.ultimoStatus.siglaPartido} gastou ${Number(vm.gastosTotais / gastosTotaisPolitico2).toFixed(2)} vezes ${vm.gastosTotais - gastosTotaisPolitico2 > 0 ? 'mais' : 'menos'} (${numeral(vm.gastosTotais - gastosTotaisPolitico2).format(FORMATO)}) do que o deputado ${vm.politicoOutro.nome} do ${vm.politicoOutro.siglaPartido} em 2017` // TODO encontrar o maior
+      // TODO compara numa funcao, dado o menor e maior
+      const comp1 = comparaQuemGastouMais(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
+      const comp2 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[1], vm.outrosPoliticos[1].gastosTotais)
+      const comp3 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
 
-      vm.comparacoes = [comp1]
+      vm.comparacoes = [comp1, comp2, comp3]
       // set timeout
     })
   },
   mounted () {
-    numeral.register('locale', 'brasil', {
-      delimiters: {
-        thousands: '.',
-        decimal: ','
-      },
-      abbreviations: {
-        thousand: 'mil',
-        million: 'milhões',
-        billion: 'b',
-        trillion: 't'
-      },
-      ordinal: function (number) {
-        return 'º'
-      },
-      currency: {
-        symbol: 'R$'
-      }
-    })
+    try {
+      numeral.register('locale', 'brasil', {
+        delimiters: {
+          thousands: '.',
+          decimal: ','
+        },
+        abbreviations: {
+          thousand: 'mil',
+          million: 'milhões',
+          billion: 'b',
+          trillion: 't'
+        },
+        ordinal: function (number) {
+          return 'º'
+        },
+        currency: {
+          symbol: 'R$'
+        }
+      })
+    } catch (e) {
+      console.log('erro ao tentar registrar numeral locale')
+    }
     numeral.locale('brasil')
     this.numeral = numeral
   },
@@ -287,20 +337,45 @@ export default {
   data () {
     return {
       politico: {},
-      politicoOutro: {},
-      politicoOutro2: {},
       lastTweets: '',
-      gastosPerPage: [],
       gastosPorFornecedores: [],
       gastosAnoAnterior: [],
       gastosTotais: 0,
       gastosTotaisAnoAnterior: 0,
       numeral,
       FORMATO,
-      comparacoes: []
+      searchDeputado: '',
+      deputadosDoMesmoUF: [],
+      comparacoes: [],
+      outrosPoliticos: [] // para comparar
+    }
+  },
+  methods: {
+    async comparaDeputado (deputado) {
+      try {
+        let politico = deputado
+        const gastosPolitico = await despesasDeputadoPorAno(deputado.id, DB, this.$fetch, '2017')
+        const gastosTotaisPolitico = gastosPolitico.reduce((soma, atual) => soma + atual.totalValorLiquido, 0)
+        politico.gastos = gastosPolitico
+        politico.gastosTotais = gastosTotaisPolitico
+
+        const comp1 = comparaQuemGastouMais(this.politico, this.gastosTotais, politico, politico.gastosTotais)
+        const comp2 = comparaQuemGastouMenos(this.politico, this.gastosTotais, politico, politico.gastosTotais)
+
+        this.comparacoes.push(comp1, comp2)
+      } catch (e) {
+        Notification.error({
+          title: 'Erro',
+          message: 'Não conseguimos acessar esse dado no momento',
+          duration: 2000
+        })
+      }
     }
   },
   computed: {
+    porcentagemEmRelacaoAoAnoAnterior () {
+      return Number((this.gastosTotais / this.gastosTotaisAnoAnterior) * 100).toFixed(2)
+    },
     gastosPorFornecedoresGrouped () {
       if (this.gastosTotais <= 0) return
       const gastosGrouped = groupBy(this.gastosPorFornecedores, (g) => normalizeText(g.tipoDespesa) || 'Outros')
@@ -317,6 +392,7 @@ export default {
     }
   },
   components: {
+    Politico
   }
 }
 </script>

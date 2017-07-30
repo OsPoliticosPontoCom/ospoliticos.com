@@ -6,10 +6,9 @@
           <div class="profile-photo">
             <img class="img-responsive" v-if="politico.ultimoStatus" :src="politico.ultimoStatus.urlFoto" alt="">
           </div>
-          <div class="profile-info">
+          <div class="profile-info" v-if="politico && politico.ultimoStatus">
             <p>Nome: {{politico.ultimoStatus.nome}}</p>
             <p>Partido: {{politico.ultimoStatus.siglaPartido}}</p>
-            <p v-if="politico.redeSocial.length > 0">Redes Sociais: {{politico.redeSocial}}</p>
             <p>Naturalidade: {{politico.municipioNascimento}}</p>
           </div>
           <hr>
@@ -19,6 +18,7 @@
             <div class="row">
               <politico class="col-md-12" v-for="politico in deputadosDoMesmoUF" :key="politico.id" :politico="politico">
                 <button class="btn btn-default btn-xs" @click.stop="comparaDeputado(politico)">Comparar</button>
+                <button slot="link" class="btn btn-default btn-xs" @click.stop="verPerfil(politico)">Ver Perfil</button>
               </politico>
             </div>
           </div>
@@ -27,14 +27,14 @@
           <el-card class="box-card">
             <div class="row">
               <div class="col-md-12">
-                <p>
+                <p v-if="politico && politico.ultimoStatus">
                   O deputado {{politico.ultimoStatus.nome}} gastou em 2016: {{new numeral(gastosTotaisAnoAnterior).format(FORMATO)}}
                 </p>
               </div>
             </div>
             <div class="row share-section">
               <div class="col-md-12">
-                <a :href="`https://twitter.com/intent/tweet?text=O deputado ${politico.ultimoStatus.nome} gastou em 2016: ${new numeral(gastosTotaisAnoAnterior).format(FORMATO)}&via=os_politicos`" target="_blank">
+                <a v-if="politico && politico.ultimoStatus" :href="`https://twitter.com/intent/tweet?text=O deputado ${politico.ultimoStatus.nome} gastou em 2016: ${new numeral(gastosTotaisAnoAnterior).format(FORMATO)}&via=os_politicos`" target="_blank">
                   <button class="btn btn-primary pull-right">
                     <i class="fa fa-twitter-square"></i> Compartilhar no Twitter
                   </button>
@@ -63,6 +63,7 @@
           </el-card>
 
           <!-- ultimos tweets do deputado(se existir em deputado.redeSocial) -->
+          <h3 v-show="lastTweets.length > 0">Últimos Tweets</h3>
           <div ref="last-tweets" class="last-tweets" v-html="lastTweets">
 
           </div>
@@ -88,7 +89,7 @@
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
               <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="false" :stroke-width="18"
               type="circle"
-              :percentage="porcentagemEmRelacaoAoAnoAnterior"></el-progress>
+              :percentage="Number(porcentagemEmRelacaoAoAnoAnterior)"></el-progress>
               <hr>
             </div>
           </div>
@@ -223,7 +224,7 @@ export default {
         console.log('tweets', tweets)
         vm.lastTweets = tweets.map(tweet => {
           return `
-          <div class="tweet">
+          <div class="tweet-wrapper el-card">
             ${tweet}
           </div>
           `
@@ -240,23 +241,28 @@ export default {
       // -- fetch twitters
       if (vm.politico.redeSocial && vm.politico.redeSocial.length > 0) {
         // TODO check if twitter
-        const twitterScreenName = vm.politico.redeSocial[0].split('/').slice(-1)[0] // get last string, the screen_name
+        for (let i = 0; i < vm.politico.redeSocial.length; i++) {
+          let redeSocial = vm.politico.redeSocial[i]
+          if (redeSocial.includes('twitter')) {
+            const twitterScreenName = redeSocial.split('/').slice(-1)[0] // get last string, the screen_name
 
-        // FROM http://www.jasonmayes.com/projects/twitterApi/#sthash.b7Ds9SC7.b9H8Ox9e.dpbs
-        // https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/js/exampleUsage.js
-        require('assets/js/twitterFetcher_min.js')
+            // FROM http://www.jasonmayes.com/projects/twitterApi/#sthash.b7Ds9SC7.b9H8Ox9e.dpbs
+            // https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/js/exampleUsage.js
+            require('assets/js/twitterFetcher_min.js')
 
-        const configProfile = {
-          'profile': {'screenName': twitterScreenName},
-          'maxTweets': 5,
-          'enableLinks': true,
-          'showUser': true,
-          'showTime': true,
-          'showImages': true,
-          'lang': 'pt',
-          'customCallback': handleTweets
+            const configProfile = {
+              'profile': {'screenName': twitterScreenName},
+              'maxTweets': 5,
+              'enableLinks': true,
+              'showUser': true,
+              'showTime': true,
+              'showImages': true,
+              'lang': 'pt',
+              'customCallback': handleTweets
+            }
+            window.twitterFetcher.fetch(configProfile)
+          }
         }
-        window.twitterFetcher.fetch(configProfile)
       }
 
       // --- despesas do ano (2017)
@@ -280,11 +286,9 @@ export default {
       let deputadosDoMesmoUF = await getDeputadosFromUF(deputado.ufNascimento, vm.$fetch)
       // n considera o deputado atual
       vm.deputadosDoMesmoUF = deputadosDoMesmoUF.filter(d => d.id !== deputado.id)
-
+      console.log('vm.deputadosDoMesmoUF', vm.deputadosDoMesmoUF)
       const outrosDeputados = sampleSize(deputadosDoMesmoUF, 2)
       vm.outrosPoliticos = [...outrosDeputados]
-      vm.politicoOutro = outrosDeputados[0]
-      vm.politicoOutro2 = outrosDeputados[1]
 
       // --- despesas do ano (2017) para outros politicos
       for (let politico of vm.outrosPoliticos) {
@@ -351,6 +355,11 @@ export default {
     }
   },
   methods: {
+    verPerfil (deputado) {
+      let id = deputado.id
+      this.$router.push({ name: 'politico', params: { id } })
+      window.location.reload()
+    },
     async comparaDeputado (deputado) {
       try {
         let politico = deputado
@@ -448,17 +457,17 @@ export default {
   color: black;
 }
 .last-tweets {
-  .tweet {
-    border: 1px solid white;
+  .tweet-wrapper {
     margin-bottom: 10px;
     position: relative;
-    height: 116px;
-    color: white;
+    height: 155px;
+    padding: 20px;
     .user {
       width: 15%;
       position: absolute;
       left: 0;
       display: block;
+      padding-left: 20px;
     }
     .tweet {
       width: 85%;
@@ -468,12 +477,12 @@ export default {
     }
     .interact {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: 6px;
+      right: 6px;
       display: block;
       a {
-        margin-right: 6px;
-        color: white;
+        padding: 6px;
+        color: #333;
       }
     }
     .timePosted {

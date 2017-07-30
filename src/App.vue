@@ -63,13 +63,13 @@
                                       <a href="http://www2.camara.leg.br/glossario" target="_blank">Dicionário</a>
                                     </li>
 
-                                    <li>
-                                      <a href="#section-two" title="Features">Features
+                                    <li v-if="$route.name === 'home'">
+                                      <a href="#section-two" title="Funcionalidades">Funcionalidades
                                       </a>
                                     </li>
 
-                                    <li>
-                                      <a href="#section-four" title="Team">Time
+                                    <li v-if="$route.name === 'home'">
+                                      <a href="#section-four" title="Time">Time
                                       </a>
                                     </li>
 

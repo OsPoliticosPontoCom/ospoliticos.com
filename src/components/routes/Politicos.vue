@@ -32,7 +32,7 @@
               </select>
             </div>
             <div class="col-md-4">
-              <input class="form-control input-nome" placeholder="Nome" />
+              <input class="form-control input-nome" v-model="buscaNome" placeholder="Nome" />
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-9" >
-        <politico class="col-md-4" v-for="politico in politicos" :key="politico.id" :politico="politico">
+        <politico class="col-md-4" v-for="politico in politicosFiltered" :key="politico.id" :politico="politico">
         </politico>
       </div>
 
@@ -71,18 +71,13 @@
 import Politico from './Politico.vue'
 // PODE SER UTIL https://github.com/coderdiaz/vue-datasource
 import InfiniteLoading from 'vue-infinite-loading'
+import {getDeputadosFromUF, normalizeText} from 'assets/js/helpers'
 
 async function getDeputados (partido, uf, sexo, fetch) {
   var newPartido = (partido !== null && partido !== 'TODOS') ? partido : ''
   var newSexo = (sexo !== null && sexo !== 'TODOS') ? sexo : ''
 
   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&siglaPartido=${newPartido}&siglaSexo=${newSexo}&itens=99&ordem=ASC&ordenarPor=nome`)
-  const result = await deputados.json()
-  return result.dados
-}
-
-async function getDeputadosFromUF (uf, fetch) {
-  const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=99&ordem=ASC&ordenarPor=nome`)
   const result = await deputados.json()
   return result.dados
 }
@@ -127,7 +122,8 @@ export default {
       estados: ['PB', 'PE', 'SP', 'RJ'], // valores serao substituidos pelos que vem da API UFs, PB, PE, SP...
       partido: 'TODOS',
       partidos: ['TODOS', 'DEM', 'PCdoB', 'PDT', 'PEN'], // valores serao substituidos pelos que vem da API Partidos, DEM, PCdoB, PDT, PEN...
-      sexo: 'TODOS'
+      sexo: 'TODOS',
+      buscaNome: ''
     }
   },
   methods: {
@@ -143,6 +139,13 @@ export default {
     }
   },
   computed: {
+    politicosFiltered () {
+      if (this.buscaNome.length > 1) {
+        return this.politicos.filter(p => normalizeText(p.nome).includes(normalizeText(this.buscaNome)))
+      } else {
+        return this.politicos
+      }
+    }
   },
   watch: {
     async estado (newEstado) {

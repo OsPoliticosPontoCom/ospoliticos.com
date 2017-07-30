@@ -47,6 +47,7 @@ async function despesasDeputadoPorAno (
   let leuTodasAsPaginas = false // TODO testar se assim funciona
   while (!leuTodasAsPaginas) {
     // atualiza com o proximo link(pagina)
+    if (!resultadoGastos || !resultadoGastos.links) break
     let proximoLink = resultadoGastos.links.find(l => l.rel === 'next')
     if (proximoLink) {
       gastos = await fetch.get(proximoLink.href)

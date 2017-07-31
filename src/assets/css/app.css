@@ -39,6 +39,10 @@
   border-color: #3b5363;
 }
 
+.btn-perfil-xs {
+  margin-bottom: 5px;
+}
+
 .fadeInDown img,
 .navbar-fixed-top img {
   max-width: 20%;

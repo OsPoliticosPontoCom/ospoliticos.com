@@ -17,8 +17,14 @@
             <br>
             <div class="row">
               <politico class="col-md-12" v-for="politico in deputadosDoMesmoUF" :key="politico.id" :politico="politico">
-                <button class="btn btn-default btn-xs" @click.stop="comparaDeputado(politico)">Comparar</button>
-                <button slot="link" class="btn btn-default btn-xs" @click.stop="verPerfil(politico)">Ver Perfil</button>
+                <button class="btn btn-default btn-xs btn-perfil-xs" @click.stop="comparaDeputado(politico)">
+                  <i class="fa fa-exchange" aria-hidden="true"></i>
+                  &nbsp;Comparar
+                </button>
+                <button slot="link" class="btn btn-default btn-xs btn-perfil-xs" @click.stop="verPerfil(politico)">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                  &nbsp;Ver Perfil
+                </button>
               </politico>
             </div>
           </div>

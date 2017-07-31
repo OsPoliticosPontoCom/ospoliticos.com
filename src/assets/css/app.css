@@ -34,3 +34,7 @@
   background-color: #3b5363;
   border-color: #3b5363;
 }
+
+.fadeInDown img {
+  max-width: 20%;
+}

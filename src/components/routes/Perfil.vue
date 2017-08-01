@@ -49,7 +49,7 @@
             </div>
           </el-card>
 
-          <el-card class="box-card" v-for="(comparacao, index) in comparacoes" :key="index">
+          <el-card class="box-card" v-for="(comparacao, index) in comparacoes" :key="index" v-if="comparacao">
             <div class="row">
               <div class="col-md-12">
                 <p>
@@ -107,7 +107,7 @@
 
           <div class="row gastos">
             <div class="col-md-12">
-              <div class="fornecedores">
+              <div class="fornecedores" v-if="gastosTotais">
                 <table class="table">
                   <caption>Maiores gastos em {{anoAtual}} por Fornecedores</caption>
                   <thead>
@@ -209,21 +209,23 @@ if (DB.isNew()) {
 }
 // funcoes para comparacao
 function comparaQuemGastouMais (deputadoA, gastoTotalA, deputadoB, gastoTotalB, ano = 2017) {
+  if ((!gastoTotalA || !gastoTotalB) || (gastoTotalA <= 0 || gastoTotalB <= 0)) return null // n compara
   let a = {nome: deputadoA.nome || deputadoA.ultimoStatus.nome, gasto: gastoTotalA, partido: deputadoA.siglaPartido || deputadoA.ultimoStatus.siglaPartido}
   let b = {nome: deputadoB.nome, gasto: gastoTotalB, partido: deputadoB.siglaPartido}
   let maior = gastoTotalA > gastoTotalB ? a : b
   let menor = gastoTotalA <= gastoTotalB ? a : b
 
-  return `O político ${normalizeText(maior.nome)} do ${maior.partido} gastou ${Number((1 - (menor.gasto / maior.gasto)) * 100).toFixed(2)}% (${numeral(maior.gasto - menor.gasto).format(FORMATO)}) a mais do que o político ${normalizeText(menor.nome)} do ${menor.partido} em ${ano}`
+  return `O político ${normalizeText(maior.nome)} do ${maior.partido} gastou ${Number((1 - (menor.gasto / maior.gasto)) * 100).toFixed(2)}% (${numeral(Number(maior.gasto - menor.gasto)).format(FORMATO)}) a mais do que o político ${normalizeText(menor.nome)} do ${menor.partido} em ${ano}`
 }
 // alternativa ao de cima
 function comparaQuemGastouMenos (deputadoA, gastoTotalA, deputadoB, gastoTotalB, ano = 2017) {
+  if ((!gastoTotalA || !gastoTotalB) || (gastoTotalA <= 0 || gastoTotalB <= 0)) return null // n compara
   let a = {nome: deputadoA.nome || deputadoA.ultimoStatus.nome, gasto: gastoTotalA, partido: deputadoA.siglaPartido || deputadoA.ultimoStatus.siglaPartido}
   let b = {nome: deputadoB.nome, gasto: gastoTotalB, partido: deputadoB.siglaPartido}
   let maior = gastoTotalA > gastoTotalB ? a : b
   let menor = gastoTotalA <= gastoTotalB ? a : b
 
-  return `O político ${normalizeText(menor.nome)} do ${menor.partido} gastou ${numeral(maior.gasto - menor.gasto).format(FORMATO)} a menos do que o político ${normalizeText(maior.nome)} do ${maior.partido} em ${ano} até o momento`
+  return `O político ${normalizeText(menor.nome)} do ${menor.partido} gastou ${numeral(Number(maior.gasto - menor.gasto)).format(FORMATO)} a menos do que o político ${normalizeText(maior.nome)} do ${maior.partido} em ${ano} até o momento`
 }
 
 export default {

@@ -78,22 +78,27 @@
 
           <div class="row gastos">
             <div class="col-md-12">
-              <h3>Gastos em {{anoAtual}}</h3>
-              <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
+              <h4 v-show="gastosTotais <= 0"></h4>
+              <div v-show="gastosTotais > 0">
+                <h3>Gastos em {{anoAtual}}</h3>
+                <h4>{{new numeral(gastosTotais).format(FORMATO)}}</h4>
 
-              <br>
-              <div class="gasto-por-dispesa" v-for="(gasto, index) in gastosPorFornecedoresGrouped" :key="index">
-                <label class="label">{{gasto.tipoDespesa}}</label>
-                <el-progress :text-inside="true" :stroke-width="18" :percentage="Number(gasto.percentage)" status="success"></el-progress>
+                <br>
+                <div class="gasto-por-dispesa" v-for="(gasto, index) in gastosPorFornecedoresGrouped" :key="index">
+                  <label class="label">{{gasto.tipoDespesa}}</label>
+                  <el-progress :text-inside="true" :stroke-width="18" :percentage="Number(gasto.percentage)" status="success"></el-progress>
+                </div>
+                <hr>
               </div>
-              <hr>
             </div>
           </div>
 
           <div class="row gastos gastos-anterior">
             <div class="col-md-12">
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-              <el-progress v-if="gastosTotaisAnoAnterior" :text-inside="false" :stroke-width="18"
+              <h4 v-show="gastosTotaisAnoAnterior > 0">Não conseguimos acessar os gastos do ano anterior</h4>
+              <br>
+              <el-progress :text-inside="false" :stroke-width="18"
               type="circle"
               :percentage="Number(porcentagemEmRelacaoAoAnoAnterior)"></el-progress>
               <hr>
@@ -247,12 +252,21 @@ export default {
       let basePath = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'
       vm.basePath = basePath
       // -------------------
+      const { id } = to.params
+      let deputado = null
 
-      const {id} = to.params
-      let deputado = await vm.$fetch.get(`${basePath}${id}`)
-      const result = await deputado.json()
-      deputado = result.dados
-      vm.politico = deputado
+      try {
+        deputado = await vm.$fetch.get(`${basePath}${id}`)
+        const result = await deputado.json()
+        deputado = result.dados
+        vm.politico = deputado
+      } catch (err) {
+        Notification.error({
+          title: 'Erro',
+          message: 'Não conseguimos acessar os dados do deputado no momento',
+          duration: 2000
+        })
+      }
 
       // -- fetch twitters
       if (vm.politico.redeSocial && vm.politico.redeSocial.length > 0) {

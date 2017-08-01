@@ -1,4 +1,5 @@
 import {set, orderBy, startCase, toLower} from 'lodash'
+import { Notification } from 'element-ui'
 
 function normalizeText (str) {
   return startCase(toLower(str))
@@ -39,7 +40,17 @@ async function despesasDeputadoPorAno (
   }
   // a API da camara retorna as despesas em pagina de até 100 itens
   let gastosPorPagina = []
-  let gastos = await fetch.get(url)
+  let gastos = null
+  try {
+    gastos = await fetch.get(url)
+  } catch (error) {
+    console.error('erro ao acessar as despesas do deputado')
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
   let resultadoGastos = await gastos.json()
   gastosPorPagina.push(resultadoGastos.dados)
 
@@ -66,14 +77,14 @@ async function despesasDeputadoPorAno (
     let gasto = gastosPorPagina[index]
 
     // existe
-    if (fornecedoresDict[gasto.cnpjCpfFornecedor]) {
+    if (gasto && fornecedoresDict[gasto.cnpjCpfFornecedor]) {
       let fornecedor = fornecedoresDict[gasto.cnpjCpfFornecedor]
       fornecedor.count += 1 // quantas vezes o mesmo fornecedor aparece
       fornecedor.totalValorLiquido += Number(gasto.valorLiquido)
       fornecedor.totalValorDocumento += Number(gasto.valorDocumento)
     } else {
       // pode vim vazio
-      if (gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
+      if (gasto && gasto.cnpjCpfFornecedor && gasto.cnpjCpfFornecedor.length > 0) {
         set(fornecedoresDict, gasto.cnpjCpfFornecedor, {
           idDeputado,
           dataDocumento: gasto.dataDocumento,
@@ -157,14 +168,33 @@ async function getDeputadosFromUF (
   fetch = false,
   itens = 100,
   ordem = 'ASC') {
-  const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=${itens}&ordem=ASC&ordenarPor=nome`)
+  let deputados = null
+  try {
+    deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=${itens}&ordem=ASC&ordenarPor=nome`)
+  } catch (error) {
+    console.error('erro ao acessar os deputados de um determinado UF', error)
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
   const result = await deputados.json()
   return result.dados
 }
 
 async function getDeputadosProposicoesFromUF (uf, fetch) {
-  //  TODO consertar os parametros
-  const proposicoes = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=2017&ordem=ASC&ordenarPor=id&itens=10`)
+  let proposicoes = null
+  try {
+    proposicoes = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=2017&ordem=ASC&ordenarPor=id&itens=10`)
+  } catch (error) {
+    console.error('erro ao acessar as proposicoes dos deputados de um determinado UF', error)
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
   const result = await proposicoes.json()
   return result.dados
 }

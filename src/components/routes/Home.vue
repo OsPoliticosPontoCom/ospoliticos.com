@@ -284,17 +284,11 @@
 
           <h6>Desenvolvedor</h6>
 
-          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/cassioscabral" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 
-          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://github.com/cassioscabral" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
 
-          <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/in/cassioscabral/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
 
         </header>
 
@@ -315,12 +309,6 @@
 
           <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
 
-          <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
-
         </header>
 
       </section>
@@ -340,12 +328,6 @@
 
           <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
 
-          <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
-
         </header>
 
       </section>
@@ -364,12 +346,6 @@
           <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
 
           <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-
-          <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
 
         </header>
 

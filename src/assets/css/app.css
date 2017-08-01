@@ -9,6 +9,10 @@
   display: -webkit-inline-box;
 }
 
+.col-estado {
+  margin-left: 15px;
+}
+
 .input-nome {
   margin-top: -5px;
 }
@@ -33,4 +37,29 @@
 .btn-primary:hover {
   background-color: #3b5363;
   border-color: #3b5363;
+}
+
+.btn-perfil-xs {
+  margin-bottom: 5px;
+}
+
+.fadeInDown img,
+.navbar-fixed-top img {
+  max-width: 20%;
+}
+
+header.header-top[role="header"] hgroup nav .navbar-toggle {
+  top: -35px !important;
+}
+
+@media (max-width: 768px) {
+  .input-nome {
+    margin-top: 5px;
+  }
+  .col-estado {
+    margin-left: 0px;
+  }
+  .politico-info {
+    margin-top: 10px;
+  }
 }

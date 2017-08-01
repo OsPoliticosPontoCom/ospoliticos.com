@@ -12,7 +12,7 @@
               <img class="politico-img" :src="urlFoto" :alt="nome">
             </router-link>
           </div>
-          <div class="col-md-6 text-left">
+          <div class="col-md-6 text-left politico-info">
             <strong>Partido:</strong> {{siglaPartido}}  <br>
             <strong>UF:</strong> {{siglaUf}}  <br>
             <hr>

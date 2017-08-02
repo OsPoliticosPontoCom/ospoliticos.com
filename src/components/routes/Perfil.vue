@@ -103,7 +103,7 @@
           <div class="row gastos gastos-anterior">
             <div class="col-md-12">
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-              <h4 v-show="gastosTotaisAnoAnterior > 0">Não conseguimos acessar os gastos do ano anterior</h4>
+              <h4 v-show="gastosTotaisAnoAnterior <= 0">Não conseguimos acessar os gastos do ano anterior</h4>
               <br>
               <el-progress :text-inside="false" :stroke-width="18"
               type="circle"

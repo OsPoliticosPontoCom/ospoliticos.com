@@ -1,7 +1,14 @@
 <template>
   <div class="perfil">
     <div class="container-fluid">
-      <div class="row full-view-height">
+      <div class="row text-center" v-if="!politico">
+        <div class="col-md-12 col-sm-12 flex-center">
+
+          <h3>Desculpe, mas não conseguimos obter nenhum dado no momento, tente mais tarde</h3>
+
+        </div>
+      </div>
+      <div class="row full-view-height" v-if="politico && politico.ultimoStatus">
         <div class="col-md-3 left text-left top-space full-height">
           <div class="profile-photo">
             <img class="img-responsive" v-if="politico.ultimoStatus" :src="politico.ultimoStatus.urlFoto" alt="">
@@ -375,7 +382,7 @@ export default {
   },
   data () {
     return {
-      politico: {},
+      politico: null,
       lastTweets: '',
       gastosPorFornecedores: [],
       gastosAnoAnterior: [],
@@ -445,6 +452,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .full-height {
   height: 100%;
 }

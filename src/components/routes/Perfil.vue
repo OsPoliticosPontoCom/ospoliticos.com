@@ -103,9 +103,9 @@
           <div class="row gastos gastos-anterior">
             <div class="col-md-12">
               <h3>Quanto já foi gasto em relação ao ano anterior até o momento</h3>
-              <h4 v-show="gastosTotaisAnoAnterior <= 0">Não conseguimos acessar os gastos do ano anterior</h4>
+              <h4 v-show="porcentagemEmRelacaoAoAnoAnterior <= 0">Não conseguimos acessar as despesas do político</h4>
               <br>
-              <el-progress :text-inside="false" :stroke-width="18"
+              <el-progress v-if="porcentagemEmRelacaoAoAnoAnterior > 0" :text-inside="false" :stroke-width="18"
               type="circle"
               :percentage="Number(porcentagemEmRelacaoAoAnoAnterior)"></el-progress>
               <hr>
@@ -338,9 +338,9 @@ export default {
       }
 
       // comparacoes
-      const comp1 = comparaQuemGastouMais(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
-      const comp2 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[1], vm.outrosPoliticos[1].gastosTotais)
-      const comp3 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais)
+      const comp1 = comparaQuemGastouMais(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais, anoAtual)
+      const comp2 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[1], vm.outrosPoliticos[1].gastosTotais, anoAtual)
+      const comp3 = comparaQuemGastouMenos(deputado, vm.gastosTotais, vm.outrosPoliticos[0], vm.outrosPoliticos[0].gastosTotais, anoAtual)
 
       const maiorGastoAnoAnterior = vm.gastosAnoAnterior[0]
       // maior gasto do ano anterior

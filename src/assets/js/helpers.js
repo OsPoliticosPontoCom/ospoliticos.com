@@ -25,10 +25,11 @@ async function despesasDeputadoPorAno (
   // check for cache
   let existeNoCache = false
   try {
-    existeNoCache = DB.queryAll('gastoDeputado', {
-      query: {idDeputado, ano},
+    let query = DB.queryAll('gastoDeputado', {
+      query: { idDeputado, ano },
       limit: 1
-    }).length > 0
+    })
+    existeNoCache = query.length > 0
   } catch (error) {
     console.error('erro testando o cache', error)
   }
@@ -41,8 +42,18 @@ async function despesasDeputadoPorAno (
   // a API da camara retorna as despesas em pagina de até 100 itens
   let gastosPorPagina = []
   let gastos = null
+  let resultadoGastos = null
   try {
     gastos = await fetch.get(url)
+    if (gastos.status === 500) {
+      Notification.error({
+        title: 'Erro',
+        message: 'Não conseguimos acessar as despesas do político no momento',
+        duration: 2000
+      })
+    }
+    resultadoGastos = await gastos.json()
+    gastosPorPagina.push(resultadoGastos.dados)
   } catch (error) {
     console.error('erro ao acessar as despesas do deputado')
     Notification.error({
@@ -51,8 +62,6 @@ async function despesasDeputadoPorAno (
       duration: 2000
     })
   }
-  let resultadoGastos = await gastos.json()
-  gastosPorPagina.push(resultadoGastos.dados)
 
   // procura por mais páginas se existir
   let leuTodasAsPaginas = false // TODO testar se assim funciona

@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="row full-view-height" v-if="politico && politico.ultimoStatus">
-        <div class="col-md-3 left text-left top-space full-height">
+        <div class="col-md-3 col-sm-3 col-xs-3 left text-left top-space full-height">
           <div class="profile-photo">
             <img class="img-responsive" v-if="politico.ultimoStatus" :src="politico.ultimoStatus.urlFoto" alt="">
           </div>
@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5 middle top-space full-height">
+        <div class="col-md-5 col-sm-6 col-xs-6 middle top-space full-height">
           <el-card class="box-card" v-if="gastosTotaisAnoAnterior > 0">
             <div class="row">
               <div class="col-md-12">
@@ -81,7 +81,7 @@
 
           </div>
         </div>
-        <div class="col-md-4 right top-space full-height">
+        <div class="col-md-4 col-sm-3 col-xs-3 right top-space full-height">
 
           <div class="row gastos">
             <div class="col-md-12">

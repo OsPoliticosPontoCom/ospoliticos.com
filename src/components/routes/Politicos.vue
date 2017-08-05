@@ -5,16 +5,16 @@
   <div class="politicos-filtro">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="row">
-            <div class="col-md-3 col-estado">
+            <div class="col-md-3 col-sm-12 col-xs-12 col-estado">
               <label>Estado</label>
               <select class="select-estado" v-model="estado">
                 <option disabled value="">Estado</option>
                 <option :value="estado.sigla" v-for="estado in estados" :key="estado.id">{{estado.nome}}</option>
               </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-12 col-xs-12">
               <label>Partido</label>
               <select class="select-partido" v-model="partido">
                 <option disabled value="">Partido</option>
@@ -22,7 +22,7 @@
                 <option :value="partido.sigla" v-for="partido in partidos" :key="partido.id">{{partido.sigla}}</option>
               </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-12 col-xs-12">
               <label>Sexo</label>
               <select class="select-sexo" v-model="sexo">
                 <option disabled value="">Sexo</option>
@@ -42,50 +42,49 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-9" >
+      <div class="col-md-9 col-sm-5 col-xs-5 max-view-heigth" >
         <h4 v-show="politicosFiltered.length === 0">Nenhum resultado encontrado</h4>
-        <politico class="col-md-4" v-for="politico in politicosFiltered" :key="politico.id" :politico="politico">
-        </politico>
+        <div class="row">
+          <politico class="col-md-4 col-sm-12 col-xs-12" v-for="politico in politicosFiltered" :key="politico.id" :politico="politico">
+          </politico>
+        </div>
+
       </div>
 
-      <div class="col-md-3">
-        <h3>Últimas proposições dos deputados da(o) {{estado}}</h3>
+      <div class="col-md-3 col-sm-7 col-xs-7 max-view-heigth" v-if="proposicoesComEmenta.length > 0">
+        <h3>Últimas proposições dos deputados da(o) {{estado}} {{partido !== 'TODOS' ? ` do partido ${partido}` : ''}}</h3>
         <hr>
-        <div class="proposicao" v-for="proposicao in proposicoes" :key="proposicao.id">
-          {{proposicao.ementa}}
+        <div class="proposicao" v-for="proposicao in proposicoesComEmenta" :key="proposicao.id" v-if="proposicao && proposicao.ementa && proposicao.ementa.length > 0">
+          {{proposicao.ementa}} <br> <br>
+          <p class="autor">Autor: {{proposicao.tipoAutor}}</p>
+          <p class="data">Apresentada em: {{moment(proposicao.dataApresentacao).format('llll')}}</p>
           <hr>
         </div>
 
       </div>
-      <!--
-      <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading"></infinite-loading>
-      -->
     </div>
   </div>
 </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
+.max-view-heigth {
+  height: 100vh;
+  overflow: auto;
+}
 </style>
 
 <script>
 import Politico from './Politico.vue'
-// PODE SER UTIL https://github.com/coderdiaz/vue-datasource
-import InfiniteLoading from 'vue-infinite-loading'
-import {getDeputadosFromUF, normalizeText} from 'assets/js/helpers'
+import {getDeputadosFromUF, getDeputadosProposicoes, normalizeText} from 'assets/js/helpers'
+import moment from 'moment'
 
 async function getDeputados (partido, uf, sexo, fetch) {
-  var newPartido = (partido !== null && partido !== 'TODOS') ? partido : ''
-  var newSexo = (sexo !== null && sexo !== 'TODOS') ? sexo : ''
+  let newPartido = (partido !== null && partido !== 'TODOS') ? partido : ''
+  let newSexo = (sexo !== null && sexo !== 'TODOS') ? sexo : ''
 
   const deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&siglaPartido=${newPartido}&siglaSexo=${newSexo}&itens=99&ordem=ASC&ordenarPor=nome`)
   const result = await deputados.json()
-  return result.dados
-}
-
-async function getDeputadosProposicoesFromUF (uf, fetch) {
-  const proposicoes = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=2017&ordem=ASC&ordenarPor=id&itens=10`)
-  const result = await proposicoes.json()
   return result.dados
 }
 
@@ -110,7 +109,7 @@ export default {
       vm.partidos = resultPartidos.dados
 
       // proposicoes
-      vm.proposicoes = await getDeputadosProposicoesFromUF('PB', vm.$fetch)
+      vm.proposicoes = await getDeputadosProposicoes('PB', vm.$fetch)
     })
   },
   data () {
@@ -124,20 +123,14 @@ export default {
       partido: 'TODOS',
       partidos: ['TODOS', 'DEM', 'PCdoB', 'PDT', 'PEN'], // valores serao substituidos pelos que vem da API Partidos, DEM, PCdoB, PDT, PEN...
       sexo: 'TODOS',
-      buscaNome: ''
+      buscaNome: '',
+      moment
     }
   },
   methods: {
-    onInfinite () {
-      setTimeout(() => {
-        const temp = []
-        for (let i = this.politicos.length + 1; i <= this.politicos.length + 20; i++) {
-          temp.push(i)
-        }
-        this.politicos = this.politicos.concat(temp)
-        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
-      }, 250)
-    }
+  },
+  mounted () {
+    this.moment.locale('pt-br')
   },
   computed: {
     politicosFiltered () {
@@ -146,25 +139,29 @@ export default {
       } else {
         return this.politicos
       }
+    },
+    proposicoesComEmenta () {
+      return this.proposicoes.filter((p, idx) => {
+        return p && p.ementa && p.ementa.length > 0
+      })
     }
   },
   watch: {
     async estado (newEstado) {
       this.politicos = await getDeputados(this.partido, newEstado, this.sexo, this.$fetch)
-      this.proposicoes = await getDeputadosProposicoesFromUF(newEstado, this.$fetch)
+      this.proposicoes = await getDeputadosProposicoes(newEstado, this.$fetch, {partido: this.partido, sexo: this.sexo})
     },
     async partido (newPartido) {
       this.politicos = await getDeputados(newPartido, this.estado, this.sexo, this.$fetch)
-      this.proposicoes = await getDeputadosProposicoesFromUF(this.estado, this.$fetch)
+      this.proposicoes = await getDeputadosProposicoes(this.estado, this.$fetch, {partido: newPartido, sexo: this.sexo})
     },
     async sexo (newSexo) {
       this.politicos = await getDeputados(this.partido, this.estado, newSexo, this.$fetch)
-      this.proposicoes = await getDeputadosProposicoesFromUF(this.estado, this.$fetch)
+      this.proposicoes = await getDeputadosProposicoes(this.estado, this.$fetch, {partido: this.partido, sexo: newSexo})
     }
   },
   components: {
-    Politico,
-    InfiniteLoading
+    Politico
   }
 }
 </script>

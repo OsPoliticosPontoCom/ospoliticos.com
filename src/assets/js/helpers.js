@@ -117,6 +117,129 @@ async function despesasDeputadoPorAno (
   }
 }
 
+async function getDeputadosFromUF (
+  uf,
+  fetch = false,
+  itens = 100,
+  ordem = 'ASC') {
+  let deputados = null
+  try {
+    deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=${itens}&ordem=ASC&ordenarPor=nome`)
+  } catch (error) {
+    console.error('erro ao acessar os deputados de um determinado UF', error)
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
+  const result = await deputados.json()
+  return result.dados
+}
+
+async function getDeputadosProposicoesFromUF (uf, fetch) {
+  let proposicoes = null
+  try {
+    proposicoes = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=2017&ordem=ASC&ordenarPor=id&itens=10`)
+  } catch (error) {
+    console.error('erro ao acessar as proposicoes dos deputados de um determinado UF', error)
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
+  const result = await proposicoes.json()
+  return result.dados
+}
+
+async function getDeputadosProposicoes (uf, fetch, {partido = null, sexo = null, ano = null, itens = 20, requestCadaProposicao = true} = {}) {
+  let newPartido = (partido !== null && partido !== 'TODOS') ? partido : ''
+  let newSexo = (sexo !== null && sexo !== 'TODOS') ? sexo : ''
+
+  let hoje = new Date()
+  let anoAtual = hoje.getFullYear()
+  // let anoAnterior = anoAtual - 1
+  ano = ano || anoAtual // default para o ano atual
+
+  let proposicoesResult = null
+  try {
+    proposicoesResult = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=${ano}&siglaPartidoAutor=${newPartido}&siglaSexo=${newSexo}&ordem=ASC&ordenarPor=id&itens=${itens}`)
+  } catch (error) {
+    console.error('erro ao acessar as proposicoes dos deputados de um determinado UF', error)
+    Notification.error({
+      title: 'Erro',
+      message: 'Não conseguimos acessar algum dado no momento',
+      duration: 2000
+    })
+  }
+  const proposicoesParsed = await proposicoesResult.json()
+  const proposicoes = proposicoesParsed.dados
+  if (requestCadaProposicao) {
+    const idsProposicoes = proposicoes.map(p => {
+      if (p.ementa.length > 0) {
+        return p.id
+      }
+    })
+    const proposicoesCompletas = []
+    for (let proposicaoId of idsProposicoes) {
+      try {
+        let proposicaoResult = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes/${proposicaoId}`)
+        let result = await proposicaoResult.json()
+        let proposicaoCompleta = result.dados
+        proposicoesCompletas.push(proposicaoCompleta)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    return proposicoesCompletas
+  }
+  return proposicoes
+}
+
+export {despesasDeputadoPorAno, getDeputadosFromUF, getDeputadosProposicoesFromUF, normalizeText, getDeputadosProposicoes}
+
+/*
+Deputado
+{
+  id:160527
+  idLegislatura:55
+  nome:"AGUINALDO RIBEIRO"
+  siglaPartido:"PP"
+  siglaUf:"PB"
+  uri:"https://dadosabertos.camara.leg.br/api/v2/deputados/160527"
+  uriPartido:"https://dadosabertos.camara.leg.br/api/v2/partidos/36809"
+  urlFoto:"http://www.camara.leg.br/internet/deputado/bandep/160527.jpg"
+}
+-----
+
+PROPOSICAO - SE TIVER
+
+{
+  "id": 142,
+  "tipo": "REQ",
+  "numero": "5679",
+  "ano": "2016",
+  "nomeProposicao": "REQ 5679/2016 => PL 5850/2016",
+  "idProposicao": "2120382",
+  "idProposicaoPrincipal": "2092189",
+  "nomeProposicaoOrigem": "NA",
+  "tipoProposicao": "Requerimento de Urgência (Art. 155 do RICD)",
+  "tema": "NA",
+  "ementa": "Requer Urgência para o PL 5.850 de 2016.",
+  "explicacaoEmenta": "NA",
+  "dataApresentacao": "07/12/2016",
+  "regimeTramitacao": ".",
+  "dataUltimoDespacho": "NA",
+  "ultimoDespacho": "NA",
+  "apreciacao": ".",
+  "indexacao": "NA",
+  "situacao": "MESA - Tramitação do Requerimento Finalizada",
+  "linkInteiroTeor": "http://www.camara.gov.br/proposicoesWeb/prop_mostrarintegra?codteor=1515376",
+  "apensadas": "NA"
+}
+*/
+
 /*
   "links": [
     {
@@ -160,84 +283,5 @@ async function despesasDeputadoPorAno (
     "numRessarcimento": "0",
     "idLote": "0",
     "parcela": "0"
-}
-*/
-
-async function getDeputadosFromUF (
-  uf,
-  fetch = false,
-  itens = 100,
-  ordem = 'ASC') {
-  let deputados = null
-  try {
-    deputados = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/deputados?siglaUf=${uf.toUpperCase()}&itens=${itens}&ordem=ASC&ordenarPor=nome`)
-  } catch (error) {
-    console.error('erro ao acessar os deputados de um determinado UF', error)
-    Notification.error({
-      title: 'Erro',
-      message: 'Não conseguimos acessar algum dado no momento',
-      duration: 2000
-    })
-  }
-  const result = await deputados.json()
-  return result.dados
-}
-
-async function getDeputadosProposicoesFromUF (uf, fetch) {
-  let proposicoes = null
-  try {
-    proposicoes = await fetch.get(`https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaUfAutor=${uf.toUpperCase()}&ano=2017&ordem=ASC&ordenarPor=id&itens=10`)
-  } catch (error) {
-    console.error('erro ao acessar as proposicoes dos deputados de um determinado UF', error)
-    Notification.error({
-      title: 'Erro',
-      message: 'Não conseguimos acessar algum dado no momento',
-      duration: 2000
-    })
-  }
-  const result = await proposicoes.json()
-  return result.dados
-}
-
-export {despesasDeputadoPorAno, getDeputadosFromUF, getDeputadosProposicoesFromUF, normalizeText}
-
-/*
-Deputado
-{
-  id:160527
-  idLegislatura:55
-  nome:"AGUINALDO RIBEIRO"
-  siglaPartido:"PP"
-  siglaUf:"PB"
-  uri:"https://dadosabertos.camara.leg.br/api/v2/deputados/160527"
-  uriPartido:"https://dadosabertos.camara.leg.br/api/v2/partidos/36809"
-  urlFoto:"http://www.camara.leg.br/internet/deputado/bandep/160527.jpg"
-}
------
-
-PROPOSICAO - SE TIVER
-
-{
-  "id": 142,
-  "tipo": "REQ",
-  "numero": "5679",
-  "ano": "2016",
-  "nomeProposicao": "REQ 5679/2016 => PL 5850/2016",
-  "idProposicao": "2120382",
-  "idProposicaoPrincipal": "2092189",
-  "nomeProposicaoOrigem": "NA",
-  "tipoProposicao": "Requerimento de Urgência (Art. 155 do RICD)",
-  "tema": "NA",
-  "ementa": "Requer Urgência para o PL 5.850 de 2016.",
-  "explicacaoEmenta": "NA",
-  "dataApresentacao": "07/12/2016",
-  "regimeTramitacao": ".",
-  "dataUltimoDespacho": "NA",
-  "ultimoDespacho": "NA",
-  "apreciacao": ".",
-  "indexacao": "NA",
-  "situacao": "MESA - Tramitação do Requerimento Finalizada",
-  "linkInteiroTeor": "http://www.camara.gov.br/proposicoesWeb/prop_mostrarintegra?codteor=1515376",
-  "apensadas": "NA"
 }
 */

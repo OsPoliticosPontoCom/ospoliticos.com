@@ -64,11 +64,6 @@
                                     </li>
 
                                     <li v-if="$route.name === 'home'">
-                                      <a href="#section-two" title="Funcionalidades">Funcionalidades
-                                      </a>
-                                    </li>
-
-                                    <li v-if="$route.name === 'home'">
                                       <a href="#section-four" title="Time">Time
                                       </a>
                                     </li>

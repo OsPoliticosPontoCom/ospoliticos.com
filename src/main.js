@@ -24,7 +24,6 @@ import 'assets/startup-theme/css/popup.css'
 
 // javascript files
 require('assets/startup-theme/js/main.js')
-require('assets/startup-theme/js/owl.carousel.js')
 require('assets/startup-theme/js/bootstrap.min.js')
 
 import VueFetch from 'vue-fetch'

@@ -152,7 +152,7 @@ export default {
 
 .logo-ospoliticos {
   max-height: 190px;
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .logo-ospoliticos-figure {

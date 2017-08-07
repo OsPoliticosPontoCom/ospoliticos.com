@@ -1,21 +1,25 @@
 # OsPolíticos.com
 
-> Nossa intenção é concentrar e divulgar a informação útil acerca da atividade dos políticos para popularizar um estado de consciência política efetiva
+## Acesse em [ospoliticos.com](http://ospoliticos.com/)
+
+### Nossa intenção é concentrar e divulgar a informação útil acerca da atividade dos políticos para popularizar um estado de consciência política efetiva
 
 ## Build Setup
 
 ``` bash
-# install dependencies
+# instala dependências
 npm install
+ou
+yarn install
 
-# serve with hot reload at localhost:8080
+# servidor local com hot reload em localhost:8080
 npm run dev
+ou
+yarn run dev
 
-# build for production with minification
+# build para produção com minificação
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+ou
+yarn run build
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
